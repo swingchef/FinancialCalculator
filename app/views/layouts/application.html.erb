@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset=”utf-8”>
   <title>FinancialCalculator</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  
+  <link rel=”stylesheet” href=”vendor/assets/css/bootstrap.css”  type=”text/css”/>
+<link rel=”stylesheet” href=”vendor/assets/css/bootstrap.min.css”  type=”text/css”/>
 </head>
 <body>
-
+<h1>Welcome to your new, free debt reducer!</h1>
 <%= yield %>
 
 </body>
