@@ -8,8 +8,24 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
-  <h1>Welcome to your new, free debt reducer!</h1>
-  <%= yield %>
+    <header>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+          <a class="navbar-brand" href="/">Free Debt Reducer</a>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="/sign_in">Sign in / Login</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <h1>Welcome to your new, free debt reducer!</h1>
+      <%= yield %>
+    </div>
 
     <div id="footer">
       <div class="container">
