@@ -3,4 +3,6 @@ class WelcomeController < ApplicationController
   end
   def about
   end
+  def dashboard
+  end
 end

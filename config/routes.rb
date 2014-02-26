@@ -8,6 +8,8 @@ FinancialCalculator::Application.routes.draw do
 
   get '/about', to: 'welcome#about'
 
+  get '/login', to: 'welcome#dashboard'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
