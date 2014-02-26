@@ -16,20 +16,24 @@
             <li class="active"><a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
           </ul>
-          <ul class="nav pull-right">
-            <li><a href="/sign_in">Sign in / Login</a></li>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/sign_in">Sign in</a></li>
+            <li><a href="/login">Login</a></li>
           </ul>
         </div>
       </div>
     </header>
-    <div class="container">
-      <%= yield %>
+    <div id="content">
+      <div class="container">
+        <%= yield %>
+      </div>
+      <div id="push"></div>
     </div>
 
-    <div id="footer">
+    <footer>
       <div class="container">
         <p class="muted credit">Here is the footer</p>
       </div>
-    </div>
+    </footer>
   </body>
 </html>
