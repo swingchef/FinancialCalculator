@@ -28,6 +28,17 @@ body {
            padding-right: 20px;
        }
    }
+   .navbar-fixed-top{
+  background: #006e2e; /* Old browsers */
+background: -moz-linear-gradient(top, #006e2e 0%, #008910 100%, #006e2e 100%, #008910 101%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#006e2e), color-stop(100%,#008910), color-stop(100%,#006e2e), color-stop(101%,#008910)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #006e2e 0%,#008910 100%,#006e2e 100%,#008910 101%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #006e2e 0%,#008910 100%,#006e2e 100%,#008910 101%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #006e2e 0%,#008910 100%,#006e2e 100%,#008910 101%); /* IE10+ */
+background: linear-gradient(to bottom, #006e2e 0%,#008910 100%,#006e2e 100%,#008910 101%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#006e2e', endColorstr='#008910',GradientType=0 ); /* IE6-9 */
 }
+}
+
 
 
