@@ -15,6 +15,13 @@ class UserTest < ActiveSupport::TestCase
     user.name = "abcde"
     assert(user.save, "User should have been saved, and wasn't")
 
+    # Test for bad email
+    user = User.new(name: "Mark McGee", email: "usermchgee")
+
+    assert(user.save == false, "User should not have been saved with a bad email.")
+
+    user.email = "sam@mgee.com"
+    assert(user.save, "User should have been saved, and wasn't")
   end
   # test "the truth" do
   #   assert true
