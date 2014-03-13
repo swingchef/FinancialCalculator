@@ -1,0 +1,47 @@
+<h2>Please fill in each respective debt which you have along with the interest rate and the current payment amount</h2>
+<div id="p_scents">
+    <p>
+        <label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_scnt_1" value="" placeholder="Debt Name" /> <input type="text" id="amount_scnt" size="25" name="amount_scnt_1"placeholder="Debt Amount"/><input type="text" id="interest_scnt" name="interest_scnt_1" size="25" placeholder="Interest Rate Ex:9.5%= 9.5"/></label> 
+    </p>
+</div>
+<h3><a href="#" id="addScnt">Add Another Input Box</a></h3>
+<button id="calculate_button" value="submit">Calculate</button>
+<script>
+var button = document.getElementById('calculate_button');
+var i = 4;//Is this a good amount?
+var financialArray = [];
+    
+    
+                button.addEventListener('click', function () {
+                    // var firstCell = $('input[name="dname_scnt_1"]').val();
+                    // alert(firstCell);
+                    // if(firstCell.length > 0 & !typeof firstCell == "undefined"){
+                    // financialArray[0][0] = firstCell;
+                    // alert(firstCell);
+                    //     }
+                  for(var z = 1; z < i; z++){
+                    //below the values are retrieved from the input boxes
+                    var dnameVar = parseFloat($('input[name=\"dname_scnt_'+z+'\"]').val());
+                    if(typeof dnameVar == "undefined"){
+                        
+                        break;
+                    }else if(dnameVar.length == 0){
+                        //testing to see if the next row down has a value in the first input
+                        if(z ==1){
+                        alert("Please fill in the missing values and then press calculate again");}
+                        break;
+                    }
+                    else {
+                        //get the other inputs in the same row if the first input has something
+                        //add the values of each row to the array
+                        var amountVar = parseFloat($('input[name=\"amount_scnt_'+z+'\"]').val());
+                        var interestVar = parseFloat($('input[name=\"interest_scnt_'+z+'\"]').val());
+                        alert(dnameVar+amountVar +interestVar); //this is working!
+                        financialArray[z][0]= dnameVar;
+                        financialArray[z][1]= amountVar;
+                        financialArray[z][2]= interestVar;//don't forget to convert this into a decimal
+                    }; //else
+                  }; //for loop
+                  alert("Reached End of Inputs");  
+                });//eventListener
+                </script>
