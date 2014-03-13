@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
     # Test for unique emails
     user = User.new(name: "Fred Wilber", email: "fred@foo.com")
     assert(user.save, "User was not saved when he should have")
-    user = User.new(name: "Fred Wilber2", email: "fred@foo.com")
+    user = User.new(name: "Fred Wilber2", email: "fred@fOo.com")
     assert(user.save == false, "A duplicate user was saved, when he shouldn't have been.")
   end
   # test "the truth" do
