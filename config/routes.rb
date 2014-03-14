@@ -10,6 +10,8 @@ FinancialCalculator::Application.routes.draw do
   get '/about', to: 'welcome#about'
 
   get '/login', to: 'welcome#dashboard'
+  
+  get '/calculate', to: 'calculation#calculate'
 
 
   # Example of regular route:
