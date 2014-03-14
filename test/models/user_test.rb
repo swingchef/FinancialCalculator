@@ -50,6 +50,16 @@ class UserTest < ActiveSupport::TestCase
 
   end
 
+  test findByEmail
+    user = createValidUser()
+    myEmail = user.email
+    user.save
+    resultingUser = User.find_by(email: myEmail)
+    assert(user == resultingUser, "The resulting user should be the same")
+
+    assert(User.find_by(email: "badEmail@here.com") == nil, "Somehow found a non-existant user...")
+  end
+
   def createValidUser()
     user = User.new(name: "Fred Wilber", email: "fred@bar.com", password: "mypassword", password_confirmation: "mypassword")
     return user
