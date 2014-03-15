@@ -1,10 +1,14 @@
-<h2>Please fill in each respective debt which you have along with the interest rate and the current payment amount</h2>
+<h3>Please enter each respective debt which you have along with the interest rate and the current payment amount</h3>
+<div class="income">
+	<input type="text" size="25" name="income_input" placeholder="Ex. 3000"/>
+</div>
 <div id="p_scents">
 	<p>
 		<label for="p_scnts">
 			<input type="text" id="p_scnt" size="25" name="dname_scnt_1" value="" placeholder="Debt Name" />
 			<input type="text" id="amount_scnt" size="25" name="amount_scnt_1"placeholder="Debt Amount"/>
 			<input type="text" id="interest_scnt" name="interest_scnt_1" size="25" placeholder="Interest Rate Ex:9.5%= 9.5"/>
+			<input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_1"placeholder="Min. Monthly Payment"/>
 		</label>
 	</p>
 </div>
@@ -13,6 +17,7 @@
 	Calculate
 </button>
 <script>
+	//TODO add minimum monthly payment amount to all appropriate areas
 	//TODO take out alerts when finished debugging
 	//TODO number/has value validation on the input forms
 	//TODO create a boolean within the last for loop and set it to false when inputs are blank/not right, or set it to true only when all three have been completed
@@ -62,19 +67,20 @@
 				//add the values of each row to the array
 				var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
 				var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
-				alert(dnameVar + amountVar + interestVar);
-				//this is working!
-				//TODO make array work so that
+				var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
+				alert(dnameVar + amountVar + interestVar+ minPayVar);
+				
 				alert("Got to array");
 				financialArray[arrayRowCounter] = {
 				0: dnameVar,
 				1: amountVar,
-				2: interestVar
+				2: interestVar,
+				3: minPayVar
 				};
 				
-				var total = financialArray[arrayRowCounter][0]+ financialArray[arrayRowCounter][1] + financialArray[arrayRowCounter][2];
+				var total = financialArray[arrayRowCounter][0]+ financialArray[arrayRowCounter][1] + financialArray[arrayRowCounter][2]+financialArray[arrayRowCounter][3];
 				
-				alert("Array amount: "+ total);
+				alert("Array sum: "+ total);
 				arrayRowCounter++;
 				//don't forget to convert this into a decimal
 				//as long as the rows hold the right inputs, it doesn't matter what order these are stored in
