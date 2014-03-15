@@ -50,7 +50,7 @@ class UserTest < ActiveSupport::TestCase
 
   end
 
-  test findByEmail
+  test "Find By Email" do
     user = createValidUser()
     myEmail = user.email
     user.save
