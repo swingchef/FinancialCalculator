@@ -1,4 +1,4 @@
-<h3>Please enter each respective debt which you have along with the interest rate and the current payment amount</h3>
+<h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
 <div class="income">
 	<input type="text" size="25" name="income_input" placeholder="Ex. 3000"/>
 </div>
@@ -12,7 +12,7 @@
 		</label>
 	</p>
 </div>
-<h3><a href="#" id="addScnt">Add Another Input Box</a></h3>
+<h3><a href="#" id="addScnt">Add Another Debt</a></h3>
 <button id="calculate_button" value="submit">
 	Calculate
 </button>
@@ -38,56 +38,81 @@
 		// alert(firstCell);
 		//     }
 
-		for ( i = 20; i > 1; i--) {//this for loop assumes that the user will have no more than 20 inputs, increase var i to desired amount
+		for ( i = 100; i > 1; i--) {//this for loop assumes that the user will have no more than 100 inputs, increase var i to desired amount
 			//for loop is finding
-			var tester = document.getElementsByName("dname_scnt_" + i);
-			if (tester.length > 0) {
+			var testerInput = document.getElementsByName("dname_scnt_" + i);
+			if (testerInput.length > 0) {
 				break;
 			}//end if
 		}//end for
-		 
-		alert("number of input rows is: " + i);//TODO take this out when debug.complete 
+
+		alert("number of input rows is: " + i);
+		//TODO take this out when debug.complete
 		var arrayRowCounter = 0;
-		for (var z = 1; z < i+1; z++) {//this for loop will be correct when i holds the correct number
+		for (var z = 1; z < i + 1; z++) {//this for loop will be correct when i holds the correct number
 			//below the values are retrieved from the input boxes
-			var dnameVar = parseFloat($('input[name=\"dname_scnt_' + z + '\"]').val());
-			if ( typeof dnameVar == "undefined") {
-					alert("This failed the undefined test");
-				//break;//this needs to be taken out as users could delete a row and then it would get read as undefined, 
-				//TODO perform this check for amountVar and InterestVar instead
-			} else if (dnameVar.length == 0) {
-				alert("Length of dnameVar_" + z +"is 0");
-				//testing to see if the next row down has a value in the first input
-				if (z == 1) {
-					alert("Please fill in the missing values and then press calculate again");
-				}
+
+			var dnameVar = $('input[name=\"dname_scnt_' + z + '\"]').val();
+			alert("debt namelength: " + dnameVar.length)
+			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
+			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
+			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
+			alert("dnamevar: " + dnameVar);
+			alert("amountvar " + amountVar);
+			alert("interestVar " + interestVar);
+			alert("minVar " + minPayVar);
+			if (dnameVar.length == 0 & isNaN(amountVar) & isNaN(interestVar) & isNaN(minPayVar)){
+				alert("Nothing on this row has anything in it");
+				continue;
+			};
+			if ( dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
+				alert("One of your rows doesn't have  all of its numbers. Please fix this and then press calculate again");
 				break;
-			} else {
+				//TODO perform this check for amountVar and InterestVar instead
+
+			};
+			if (dnameVar.length == 0 & (!isNaN(amountVar) | !isNaN(interestVar) | !isNaN(minPayVar))) {
+				alert("Got to missing inputs test");
+
+				alert("Length of dnameVar_" + z + "is 0");
+				//testing to see if the next row down has a value in the first input
+				//if z is less than i, need to keep going
+
+				alert("Please fill in the missing values and then press calculate again");
+				break;
+
+			}; 
 				//get the other inputs in the same row if the first input has something
 				//add the values of each row to the array
-				var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
-				var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
-				var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
-				alert(dnameVar + amountVar + interestVar+ minPayVar);
-				
+
+				alert(dnameVar + amountVar + interestVar + minPayVar);
+
 				alert("Got to array");
 				financialArray[arrayRowCounter] = {
-				0: dnameVar,
-				1: amountVar,
-				2: interestVar,
-				3: minPayVar
+					0 : dnameVar,
+					1 : amountVar,
+					2 : interestVar,
+					3 : minPayVar
 				};
-				
-				var total = financialArray[arrayRowCounter][0]+ financialArray[arrayRowCounter][1] + financialArray[arrayRowCounter][2]+financialArray[arrayRowCounter][3];
-				
-				alert("Array sum: "+ total);
+
+				//the array is sorted according to AMOUNT(Should this be something else?)
+				financialArray = financialArray.sort(function(a, b) {
+					return a[1] > b[1];
+				});
+				console.log(financialArray);
+				var total = financialArray[arrayRowCounter][1] + financialArray[arrayRowCounter][2] + financialArray[arrayRowCounter][3];
+
+				//alert("Array sum: "+ total);
 				arrayRowCounter++;
 				//don't forget to convert this into a decimal
 				//as long as the rows hold the right inputs, it doesn't matter what order these are stored in
-			}
-			; //else
+			 //else
 		};//for loop
-		alert("Reached End of Inputs");
+		//alert("Reached End of Inputs, Going to About Page");
+
+		//document.location.href ="/about";
+		//this will change to whatever the calculation page is
+
 	});
 	//eventListener
 </script>
