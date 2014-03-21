@@ -21,8 +21,8 @@ class AuthenticationPagesTest < ActionDispatch::IntegrationTest
     assert(user.save, "Failed to save user for controller testing")
 
     # Log in with invalid credentials
-    #post_via_redirect sessions_path, {:session=>{:email=>'bad@here.com', :password=>'badpassword'}}
-    #assert(flash[:error].empty, "Flash errors array was empty after bad user submission")
+    post_via_redirect sessions_path, {:session=>{:email=>'bad@here.com', :password=>'badpassword'}}
+    assert(flash[:error], "Flash errors array was empty after bad user submission")
     #assert(path == sessions_path, "Was not correctly re-direct back to the signin page, after a false login.")
 
     # Log in and make sure you are correctly redirected
