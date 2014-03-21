@@ -1,11 +1,12 @@
-<h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
+<h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order of the debts.</h3>
 <div class="income">
 	<input type="text" size="25" name="income_input" placeholder="Ex. 3000"/>
 </div>
 <div id="p_scents">
 	<p>
 		<label for="p_scnts">
-			<input type="text" id="p_scnt" size="25" name="dname_scnt_1" value="" placeholder="Debt Name" />
+			<input type="text" id="p_scnt" size="25" name="dname_scnt_1" value="" placeholder="Debt Name" data-container="body" 
+			data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."/>
 			<input type="text" id="amount_scnt" size="25" name="amount_scnt_1"placeholder="Debt Amount"/>
 			<input type="text" id="interest_scnt" name="interest_scnt_1" size="25" placeholder="Interest Rate Ex:9.5%= 9.5"/>
 			<input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_1"placeholder="Min. Monthly Payment"/>
@@ -16,6 +17,7 @@
 <button id="calculate_button" value="submit">
 	Calculate
 </button>
+ 
 <script>
 	//TODO add minimum monthly payment amount to all appropriate areas
 	//TODO take out alerts when finished debugging
@@ -61,11 +63,11 @@
 
 			var dnameVar = $('input[name=\"dname_scnt_' + z + '\"]').val();
 			alert("debt namelength: " + dnameVar.length)
-			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
-			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
-			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
+			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val().replace(",",""));
+			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val() *.01);//interest is converted into a decimal
+			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val().replace(",",""));
 			//alert("dnamevar: " + dnameVar);
-			//alert("amountvar " + amountVar);
+			alert("amountvar " + amountVar);
 			//alert("interestVar " + interestVar);
 			//alert("minVar " + minPayVar);
 
@@ -73,7 +75,7 @@
 				alert("Nothing on this row has anything in it");
 				continue;
 			};
-
+			
 			if (dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
 
 				if (isNaN(interestVar)) {
@@ -101,7 +103,11 @@
 			};
 			//get the other inputs in the same row if the first input has something
 			//add the values of each row to the array
-
+			if(interestVar > 1 | interestVar<0){
+				document.getElementsByName("interest_scnt_" + z)[0].style.border = "5px solid red";
+				alert("Please change your interest rate in the higlighted box and enter it as a whole number with a decimal ex: 9.5% = \"9.5\"");
+				break;
+			};
 			alert(dnameVar + amountVar + interestVar + minPayVar);
 
 			alert("Got to array");

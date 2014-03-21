@@ -20,6 +20,16 @@
 	input { padding:5px; border:5px solid #999; border-radius:4px; -moz-border-radius:4px; -web-kit-border-radius:4px; -khtml-border-radius:4px; }
 	</style>
 	<script>
+  $(document).ready(function() {
+    $(function ()  
+      { $("#p_scnt").popover({title: 'Twitter Bootstrap Popover', content: "It's so simple to create a tooltop for my website!"}) 
+      .blur(function () {
+            $(this).popover('hide');
+        }); 
+    });  
+   });
+ </script>
+	<script>
 	 $ (document).ready(function() {
 	 	
 	$(function() {
