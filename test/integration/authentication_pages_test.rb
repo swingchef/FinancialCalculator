@@ -1,0 +1,33 @@
+require 'test_helper'
+
+class AuthenticationPagesTest < ActionDispatch::IntegrationTest
+
+  test "login and browse site" do
+    # TODO Set up https connection
+    #https!
+
+    # Verify we can hit the login page correctly
+    #get "/signin"
+    get signin_path
+    assert_response :success
+
+    # Create a new user to login
+    user = User.new
+    user.name = "Nathan Cooper"
+    user.email = "nathan@example.com"
+    myPass = "yabbaDabba"
+    user.password = myPass
+    user.password_confirmation = myPass
+    assert(user.save, "Failed to save user for controller testing")
+
+    # Log in with invalid credentials
+    #post_via_redirect sessions_path, {:session=>{:email=>'bad@here.com', :password=>'badpassword'}}
+    #assert(flash[:error].empty, "Flash errors array was empty after bad user submission")
+    #assert(path == sessions_path, "Was not correctly re-direct back to the signin page, after a false login.")
+
+    # Log in and make sure you are correctly redirected
+    post_via_redirect sessions_path, {:session=>{:email=>user.email, :password=>myPass}}
+    assert_response :success
+    #assert(path == root_path, "Was not correctly re-directed after login")
+  end
+end

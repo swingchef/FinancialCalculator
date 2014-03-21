@@ -17,8 +17,8 @@
             <li><a href="/about">About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<li><a href="/calculate">Calculate</a></li>
-            <li><a href="/sign_up">Sign Up</a></li>
+						<li><%= link_to "Calculate", calculate_path %></li>
+						<li><%= link_to "Sign up", signin_path %></li>
             <li><a href="/login">Login</a></li>
           </ul>
         </div>
@@ -26,6 +26,9 @@
     </header>
     <div id="content">
       <div class="container">
+				<% flash.each do |key, value| %>
+					<div class="alert alert-<%= key %>"><%= value %></div>
+				<% end%>
         <%= yield %>
       </div>
       <div id="push"></div>

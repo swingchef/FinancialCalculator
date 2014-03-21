@@ -12,6 +12,10 @@ FinancialCalculator::Application.routes.draw do
   get '/login', to: 'welcome#dashboard'
   
   get '/calculate', to: 'calculation#calculate'
+  resources :sessions, only: [:new, :create, :destroy]
+  get '/signup',  to: 'users#new'
+  get '/signin',  to: 'sessions#new'
+  delete '/signout',  to: 'sessions#destroy'
 
 
   # Example of regular route:
