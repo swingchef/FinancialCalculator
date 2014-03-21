@@ -139,7 +139,7 @@ $(document).ready(function() {
 		return false;
 	});
 
-	$('#remScnt').click(function() { 
+	$('#remScnt').live('click',function() { 
 		if( i > 2 ) {
 			$(this).parents('p').remove();
 
