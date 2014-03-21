@@ -15,4 +15,5 @@ class User < ActiveRecord::Base
 
   before_save { self.email = email.downcase}
   # TODO Make the database force unique emails as well.  This can be done by adding an index to the "email" column, and then force unique
+  # http://ruby.railstutorial.org/chapters/sign-in-sign-out
 end
