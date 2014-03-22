@@ -1,21 +1,24 @@
 FinancialCalculator::Application.routes.draw do
-  get "users/new"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+
+  # Static routes
   root 'welcome#index'
   get '/index', to: 'welcome#index'
-
   get '/about', to: 'welcome#about'
-
   get '/login', to: 'welcome#dashboard'
-  
   get '/calculate', to: 'calculation#calculate'
+
+  # Session routes
   resources :sessions, only: [:new, :create, :destroy]
-  get '/signup',  to: 'users#new'
   get '/signin',  to: 'sessions#new'
   delete '/signout',  to: 'sessions#destroy'
+
+  # User routes
+  get '/signup',  to: 'users#new'
+  post '/signup',  to: 'users#create', as: :create_user
 
 
   # Example of regular route:
