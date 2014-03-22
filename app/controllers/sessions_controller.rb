@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
 		else
 			# Create an error message and re-render the signin form
 			puts 'Bad username / password'
-			flash[:error] = "Invalid email/password combination"
+			flash.now[:error] = "Invalid email/password combination"
 			render 'new'
 		end
 	end

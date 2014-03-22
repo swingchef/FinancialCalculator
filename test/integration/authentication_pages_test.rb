@@ -23,6 +23,10 @@ class AuthenticationPagesTest < ActionDispatch::IntegrationTest
     # Log in with invalid credentials
     post_via_redirect sessions_path, {:session=>{:email=>'bad@here.com', :password=>'badpassword'}}
     assert(flash[:error], "Flash errors array was empty after bad user submission")
+
+	# Test that the flash cache is cleared on the next request
+	get_via_redirect root_path
+    assert(flash[:error].nil? || "" == flash[:error], "Flash errors array was not empty after a second request")
 	## TODO assert the sign-in button is still visible
     #assert(path == sessions_path, "Was not correctly re-direct back to the signin page, after a false login.")
 
