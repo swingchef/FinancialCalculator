@@ -60,6 +60,12 @@ class UserTest < ActiveSupport::TestCase
     assert(User.find_by(email: "badEmail@here.com") == nil, "Somehow found a non-existant user...")
   end
 
+  test "Verify user remember token" do
+	  user = createValidUser()
+	  user.save
+	  assert(!user.remember_token.nil? && user.remember_token != "", "User did not receive a valid remember_token upon creation")
+  end
+
   def createValidUser()
     user = User.new(name: "Fred Wilber", email: "fred@bar.com", password: "mypassword", password_confirmation: "mypassword")
     return user
