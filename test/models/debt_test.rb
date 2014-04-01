@@ -31,7 +31,4 @@ class DebtTest < ActiveSupport::TestCase
 		d.min_monthly_payment = 25
 		return d
 	end
-	# test "the truth" do
-	#   assert true
-	# end
 end
