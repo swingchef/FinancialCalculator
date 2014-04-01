@@ -1,4 +1,9 @@
 class Debt < ActiveRecord::Base
+	# Schedule relationship
+	belongs_to :schedule
+	validates :schedule_id, presence: true
+	validates_presence_of :schedule
+
 	# Validation for the name field
 	validates :name, presence: true,
 									 length: {minimum: 1}

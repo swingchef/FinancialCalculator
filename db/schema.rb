@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401033649) do
+ActiveRecord::Schema.define(version: 20140401142655) do
 
   create_table "debts", force: true do |t|
     t.string   "name"
@@ -20,7 +20,10 @@ ActiveRecord::Schema.define(version: 20140401033649) do
     t.integer  "min_monthly_payment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "schedule_id"
   end
+
+  add_index "debts", ["schedule_id"], name: "index_debts_on_schedule_id"
 
   create_table "schedules", force: true do |t|
     t.string   "name"
@@ -28,8 +31,10 @@ ActiveRecord::Schema.define(version: 20140401033649) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "schema_id"
   end
 
+  add_index "schedules", ["schema_id"], name: "index_schedules_on_schema_id"
   add_index "schedules", ["user_id"], name: "index_schedules_on_user_id"
 
   create_table "users", force: true do |t|
