@@ -46,14 +46,14 @@ $(document).ready(function() {
 			}// end if
 		}// end for
 
-		alert("number of input rows is: " + i);
+		//alert("number of input rows is: " + i);
 		// TODO take this out when debug.complete
 		var arrayRowCounter = 0;
 		for (var z = 1; z < i + 1; z++) {// this for loop will be correct when i holds the correct number
 			// below the values are retrieved from the input boxes
 
 			var dnameVar = $('input[name=\"dname_scnt_' + z + '\"]').val();
-			alert("debt namelength: " + dnameVar.length)
+			//alert("debt namelength: " + dnameVar.length)
 			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
 			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
 			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
@@ -95,9 +95,9 @@ $(document).ready(function() {
 			// get the other inputs in the same row if the first input has something
 			// add the values of each row to the array
 
-			alert(dnameVar + amountVar + interestVar + minPayVar);
+			//alert(dnameVar + amountVar + interestVar + minPayVar);
 
-			alert("Got to array");
+			//alert("Got to array");
 			financialArray[arrayRowCounter] = {
 				name : dnameVar,
 				amount : amountVar * -1,
@@ -118,15 +118,15 @@ $(document).ready(function() {
 			// as long as the rows hold the right inputs, it doesn't matter what order these are stored in
 			// else
 		};// for loop
-		 alert("Reached End of Inputs, Going to About Page");
+		 //alert("Reached End of Inputs, Going to About Page");
 
 		// document.location.href ="/about";
 		// this will change to whatever the calculation page is
 
 		var storedArray = [];
 
-		var payment = parseFloat(document.getElementsByName("income_input").value) / 12 * .01;
-		alert("This is your income-based payment: "+ payment);
+		//var payment = parseFloat(document.getElementsByName("income_input").value) / 12 * .01;
+		//alert("This is your income-based payment: "+ payment);
 		//this accumulates each iteration, at the beginning we assume that the amount(10) is 1% of the person's income
 		var futureValue = 0;
 		//this doesn't change and is only used in the nper function
@@ -173,8 +173,9 @@ $(document).ready(function() {
 
 			//this calculates the last month amount and then adds the difference to the minPay of the next debt
 			var lastMonthAmount = fv(parseFloat(financialArray[i]["rate"]), 12, roundedPayoffMonths, payment, financialArray[i]["amount"]);
+			lastMonthAmount = lastMonthAmount * (1+(financialArray[i]["rate"]*.01));
 			console.log("The residual amount in the last month is for " + financialArray[i]["name"] + ": " + lastMonthAmount);
-
+			console.log("Rollover Amount: " + finalMonthRolloverAmount+ " going into array storage");
 			if (i == 0) {
 				paymentSchedule[1] = {
 					"payment" : 0,
@@ -191,7 +192,7 @@ $(document).ready(function() {
 
 			};
 
-			finalMonthRolloverAmount = payment - lastMonthAmount;
+			finalMonthRolloverAmount = payment - (lastMonthAmount); //TODO account for interest in the last month
 
 			console.log("Rollover Amount: " + finalMonthRolloverAmount);
 			//function nper(rate, per, pmt, pv, fv)
