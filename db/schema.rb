@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140322212738) do
+ActiveRecord::Schema.define(version: 20140401142655) do
+
+  create_table "debts", force: true do |t|
+    t.string   "name"
+    t.integer  "amount"
+    t.float    "interest_rate"
+    t.integer  "min_monthly_payment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "schedule_id"
+  end
+
+  add_index "debts", ["schedule_id"], name: "index_debts_on_schedule_id"
+
+  create_table "schedules", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "schedules", ["user_id"], name: "index_schedules_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "name"

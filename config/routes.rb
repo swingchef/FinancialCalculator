@@ -20,6 +20,9 @@ FinancialCalculator::Application.routes.draw do
   get '/signup',  to: 'users#new'
   post '/signup',  to: 'users#create', as: :create_user
 
+  # Debt routes
+  post '/debt', to: 'debt#new', as: :create_debt
+  post '/schedule', to: 'schedule#new', as: :create_schedule
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
