@@ -349,7 +349,7 @@ $(document).ready(function() {
 	var scntDiv = $('#p_scents');
 	var i = $('#p_scents p').size() + 1;
 
-	$('#addScnt').click(function() { alert("Add button clicked");
+	$('#addScnt').click(function() { 
 		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_scnt_' + (i) + '" value="" placeholder="Debt Name" /><input type="text" id="amount_scnt" size="25" name="amount_scnt_' + (i) + '" placeholder="Debt Amount"/><input type="text" id="interest_scnt" size="25" name="interest_scnt_' + (i) + '"placeholder="Interest Rate"/><input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_' + (i) + '"placeholder="Min. Monthly Payment"/></label><a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
 		i++;
 		return false;
