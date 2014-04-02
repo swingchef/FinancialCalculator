@@ -28,13 +28,8 @@ $(document).ready(function() {
 		//  alert(firstCell);
 		//      }
 
-		var inputs, index;
-
-		inputs = document.getElementsByTagName('input');
-		// TODO Remove styling out of javascript (if possible)
-		for ( index = 0; index < inputs.length; ++index) {
-			inputs[index].style.border = "5px solid #999";
-		}
+		// Resets all of the input fields to a non-error state
+		$('input').removeClass('error');
 
 		var payment = parseFloat($("input[name=\"income_input\"]").val())/12 * .01 ;
 		alert("This is your income-based payment: "+ payment);
@@ -72,18 +67,15 @@ $(document).ready(function() {
 			if (dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
 
 				if (isNaN(interestVar)) {
-					// TODO Remove styling form javascript (if possible)
-					document.getElementsByName("interest_scnt_" + z)[0].style.border = "5px solid red";
+					$('input[name="interest_scnt_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(amountVar)) {
-					// TODO Remove styling form javascript (if possible)
-					document.getElementsByName("amount_scnt_" + z)[0].style.border = "5px solid red";
+					$('input[name="amount_scnt_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(minPayVar)) {
-					// TODO Remove styling form javascript (if possible)
-					document.getElementsByName("minpayamount_scnt_" + z)[0].style.border = "5px solid red";
+					$('input[name="minpayamount_scnt_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 
@@ -93,8 +85,7 @@ $(document).ready(function() {
 			};
 			if (dnameVar.length == 0 & (!isNaN(amountVar) | !isNaN(interestVar) | !isNaN(minPayVar))) {
 
-				// TODO Remove styling form javascript (if possible)
-				document.getElementsByName("dname_scnt_" + z)[0].style.border = "5px solid red";
+				$('input[name="dname_scnt_' + z + '"]').addClass('error');
 				alert("Please make sure that the highlighted cell holds the name for its respective row");
 				break;
 			};
