@@ -31,6 +31,7 @@ $(document).ready(function() {
 		var inputs, index;
 
 		inputs = document.getElementsByTagName('input');
+		// TODO Remove styling out of javascript (if possible)
 		for ( index = 0; index < inputs.length; ++index) {
 			inputs[index].style.border = "5px solid #999";
 		}
@@ -40,6 +41,7 @@ $(document).ready(function() {
 		//TODO add in validation to see if income has value
 		for ( i = 100; i > 1; i--) {// this for loop assumes that the user will have no more than 100 inputs, increase var i to desired amount
 			// for loop is finding
+			// TODO Add a class to designate inputs, so we don't need to use the magic number, 100
 			var testerInput = document.getElementsByName("dname_scnt_" + i);
 			if (testerInput.length > 0) {
 				break;
@@ -70,14 +72,17 @@ $(document).ready(function() {
 			if (dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
 
 				if (isNaN(interestVar)) {
+					// TODO Remove styling form javascript (if possible)
 					document.getElementsByName("interest_scnt_" + z)[0].style.border = "5px solid red";
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(amountVar)) {
+					// TODO Remove styling form javascript (if possible)
 					document.getElementsByName("amount_scnt_" + z)[0].style.border = "5px solid red";
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(minPayVar)) {
+					// TODO Remove styling form javascript (if possible)
 					document.getElementsByName("minpayamount_scnt_" + z)[0].style.border = "5px solid red";
 					alert("Please make sure that the highlighted cells are in number format");
 				};
@@ -88,6 +93,7 @@ $(document).ready(function() {
 			};
 			if (dnameVar.length == 0 & (!isNaN(amountVar) | !isNaN(interestVar) | !isNaN(minPayVar))) {
 
+				// TODO Remove styling form javascript (if possible)
 				document.getElementsByName("dname_scnt_" + z)[0].style.border = "5px solid red";
 				alert("Please make sure that the highlighted cell holds the name for its respective row");
 				break;
