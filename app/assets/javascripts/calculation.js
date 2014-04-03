@@ -6,7 +6,44 @@
 // TODO Take out alerts when finished debugging
 // TODO Number/has value validation on the input forms
 // TODO Create a boolean within the last for loop and set it to false when inputs are blank/not right, or set it to true only when all three have been completed
+var FC = FC === undefined ? {} : FC;
 
+FC.calculate = {
+
+	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
+	// Returns: jQuery <p> element 
+	createDebtRow: function() {
+		var p = $('<p />');
+		var div = $('<div />');
+		p.append(div);
+
+		var lName = $('<label>').text('Debt Name');
+		var iName = $('<input>').attr({type: 'text', placeholder: 'Eg. Credit Card XYZ'});
+		var lAmount = $('<label>').text('Debt Amount');
+		var iAmount = $('<input>').attr({type: 'text', placeholder: 'Eg. 100 = $1,000'});
+		var lInterest = $('<label>').text('Interest Rate');
+		var iInterest = $('<input>').attr({type: 'text', placeholder: 'Eg. 9.5 = 9.5%'});
+		var lMonthlyPayment = $('<label>').text('Min. Monthly Payment');
+		var iMonthlyPayment = $('<input>').attr({type: 'text', placeholder: 'Eg. 10 = $10'});
+		var removeButton = $('<a href="javascript:void(0)">Remove</a>');
+
+		removeButton.click(function() {
+			$(this).parent('div').parent('p').remove();
+		});
+
+		div.append(lName)
+			.append(iName)
+			.append(lAmount)
+			.append(iAmount)
+			.append(lInterest)
+			.append(iInterest)
+			.append(lMonthlyPayment)
+			.append(iMonthlyPayment)
+			.append(removeButton);
+
+		return p;
+	}
+}
 $(document).ready(function() {
 
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
@@ -345,21 +382,11 @@ $(document).ready(function() {
 
 	}); // eventListener
 
-	var scntDiv = $('#p_scents');
-	var i = $('#p_scents p').size() + 1;
-
-	$('#addScnt').click(function() { 
-		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_' + (i) + '" value="" placeholder="Debt Name" /><input type="text" id="amount_scnt" size="25" name="amount_' + (i) + '" placeholder="Debt Amount"/><input type="text" id="interest_scnt" size="25" name="interest_' + (i) + '"placeholder="Interest Rate"/><input type="text" id="mpamount_scnt" size="25" name="minpayamount_' + (i) + '"placeholder="Min. Monthly Payment"/></label><a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
-		i++;
-		return false;
-	});
-
-	$('#remScnt').live('click', function() {
-		if (i > 2) {
-			$(this).parents('p').remove();
-
-			i--;
-		}
+	// Add a new debt row
+	$('#addScnt').click(function() {
+		var debtParagraph = FC.calculate.createDebtRow();
+		$('#p_scents').append(debtParagraph);
 		return false;
 	});
 });
+
