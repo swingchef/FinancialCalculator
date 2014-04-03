@@ -12,7 +12,7 @@ $(document).ready(function() {
 	// Use the boolean to prevent an incomplete array from being sent to the next method.
 	var button = $('#calculate_button');
 
-	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_scnt_.value, when found, sets i = .value and breaks
+	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
 
 	// Is this a good amount? this will change to whatever the for loop finds
@@ -21,7 +21,7 @@ $(document).ready(function() {
 
 	button.click(function() {
 		// code which is commented out was a test
-		//  var firstCell = $('input[name="dname_scnt_1"]').val();
+		//  var firstCell = $('input[name="dname_1"]').val();
 		//  alert(firstCell);
 		//  if(firstCell.length > 0 & !typeof firstCell == "undefined"){
 		//  financialArray[0][0] = firstCell;
@@ -37,7 +37,7 @@ $(document).ready(function() {
 		for ( i = 100; i > 1; i--) {// this for loop assumes that the user will have no more than 100 inputs, increase var i to desired amount
 			// for loop is finding
 			// TODO Add a class to designate inputs, so we don't need to use the magic number, 100
-			var testerInput = document.getElementsByName("dname_scnt_" + i);
+			var testerInput = document.getElementsByName("dname_" + i);
 			if (testerInput.length > 0) {
 				break;
 			}// end if
@@ -49,11 +49,11 @@ $(document).ready(function() {
 		for (var z = 1; z < i + 1; z++) {// this for loop will be correct when i holds the correct number
 			// below the values are retrieved from the input boxes
 
-			var dnameVar = $('input[name=\"dname_scnt_' + z + '\"]').val();
+			var dnameVar = $('input[name=\"dname_' + z + '\"]').val();
 			//alert("debt namelength: " + dnameVar.length)
-			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
-			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
-			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
+			var amountVar = parseFloat($('input[name=\"amount_' + z + '\"]').val());
+			var interestVar = parseFloat($('input[name=\"interest_' + z + '\"]').val());
+			var minPayVar = parseFloat($('input[name=\"minpayamount_' + z + '\"]').val());
 			// alert("dnamevar: " + dnameVar);
 			// alert("amountvar " + amountVar);
 			// alert("interestVar " + interestVar);
@@ -67,15 +67,15 @@ $(document).ready(function() {
 			if (dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
 
 				if (isNaN(interestVar)) {
-					$('input[name="interest_scnt_' + z + '"]').addClass('error');
+					$('input[name="interest_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(amountVar)) {
-					$('input[name="amount_scnt_' + z + '"]').addClass('error');
+					$('input[name="amount_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 				if (isNaN(minPayVar)) {
-					$('input[name="minpayamount_scnt_' + z + '"]').addClass('error');
+					$('input[name="minpayamount_' + z + '"]').addClass('error');
 					alert("Please make sure that the highlighted cells are in number format");
 				};
 
@@ -85,7 +85,7 @@ $(document).ready(function() {
 			};
 			if (dnameVar.length == 0 & (!isNaN(amountVar) | !isNaN(interestVar) | !isNaN(minPayVar))) {
 
-				$('input[name="dname_scnt_' + z + '"]').addClass('error');
+				$('input[name="dname_' + z + '"]').addClass('error');
 				alert("Please make sure that the highlighted cell holds the name for its respective row");
 				break;
 			};
@@ -343,14 +343,13 @@ $(document).ready(function() {
 
 		}
 
-	});
-	// eventListener
+	}); // eventListener
 
 	var scntDiv = $('#p_scents');
 	var i = $('#p_scents p').size() + 1;
 
 	$('#addScnt').click(function() { 
-		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_scnt_' + (i) + '" value="" placeholder="Debt Name" /><input type="text" id="amount_scnt" size="25" name="amount_scnt_' + (i) + '" placeholder="Debt Amount"/><input type="text" id="interest_scnt" size="25" name="interest_scnt_' + (i) + '"placeholder="Interest Rate"/><input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_' + (i) + '"placeholder="Min. Monthly Payment"/></label><a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
+		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_' + (i) + '" value="" placeholder="Debt Name" /><input type="text" id="amount_scnt" size="25" name="amount_' + (i) + '" placeholder="Debt Amount"/><input type="text" id="interest_scnt" size="25" name="interest_' + (i) + '"placeholder="Interest Rate"/><input type="text" id="mpamount_scnt" size="25" name="minpayamount_' + (i) + '"placeholder="Min. Monthly Payment"/></label><a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
 		i++;
 		return false;
 	});
