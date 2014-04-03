@@ -16,48 +16,56 @@ FC.calculate = {
 
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
 	// Returns: jQuery <p> element 
-	createDebtRow: function() {
-		var p = $('<p />');
-		var div = $('<div />');
-		p.append(div);
+	addDebtRow: function() {
+		$(".addButton").hide();
 
-		var lName = $('<label>').text('Debt Name');
-		var iName = $('<input>').attr({
-			type: 'text',
-			class: 'debtName',
-			placeholder: 'Eg. Credit Card XYZ'});
-		var lAmount = $('<label>').text('Debt Amount');
-		var iAmount = $('<input>').attr({
-			type: 'text',
-			class: 'debtAmount',
-			placeholder: 'Eg. 100 = $1,000'});
-		var lInterest = $('<label>').text('Interest Rate');
-		var iInterest = $('<input>').attr({
-			type: 'text',
-			class: 'interestRate',
-			placeholder: 'Eg. 9.5 = 9.5%'});
-		var lMonthlyPayment = $('<label>').text('Min. Monthly Payment');
-		var iMonthlyPayment = $('<input>').attr({
-			type: 'text',
-			class: 'minMonthlyPayment',
-			placeholder: 'Eg. 10 = $10'});
-		var removeButton = $('<a href="javascript:void(0)">Remove</a>');
+		var accountsDiv = $('#accounts');
+		var row = $(' \
+		<div class="row"> \
+			<div class="input-group col-sm-2"> \
+				<input class="debtName form-control" placeholder="Debt Name"/> \
+			</div> \
+			<div class="input-group col-sm-2"> \
+				<span class="input-group-addon">$</span> \
+				<input class="debtAmount form-control" placeholder="Debt Amount"/> \
+			</div> \
+			<div class="input-group col-sm-2"> \
+				<input class="interestRate form-control" placeholder="Interest Rate"/> \
+				<span class="input-group-addon">%</span>		 \
+			</div> \
+			<div class="input-group col-sm-2"> \
+				<span class="input-group-addon">$</span> \
+				<input class="minMonthlyPayment form-control" placeholder="Min. Payment"/> \
+			</div>	 \
+			<div class="col-sm-2"> \
+				<button type="button" class="subtractButton btn btn-default btn-sm">-</button> \
+				<button type="button" class="addButton btn btn-default btn-sm">+</button> \
+			</div> \
+		</div> \
+				');
+		accountsDiv.append(row);
 
-		removeButton.click(function() {
-			$(this).parent('div').parent('p').remove();
+		FC.calculate.toggleMinusButtons();
+
+		$('.subtractButton:last').click(function() {
+			$(this).parents('div.row').remove();
+			FC.calculate.toggleMinusButtons();
 		});
 
-		div.append(lName)
-			.append(iName)
-			.append(lAmount)
-			.append(iAmount)
-			.append(lInterest)
-			.append(iInterest)
-			.append(lMonthlyPayment)
-			.append(iMonthlyPayment)
-			.append(removeButton);
+		$('.addButton:last').click(function() {		
+			FC.calculate.addDebtRow();
+		});
+	},
 
-		return p;
+	// Scans the existing rows, and hides/shows the appropriate buttons
+	toggleMinusButtons: function() {
+		if ($('#accounts div.row').size() > 1) {
+			$('button.subtractButton').show();
+		}else{
+			$('button.subtractButton').hide();
+		}
+		// Always make sure there is at least one add button visible
+		$('.addButton:last').show();
 	},
 
 	// nper function
@@ -124,14 +132,7 @@ FC.calculate = {
 $(document).ready(function() {
 
 	// Add a new debt row
-	$('#addScnt').click(function() {
-		var debtParagraph = FC.calculate.createDebtRow();
-		$('#p_scents').append(debtParagraph);
-		return false;
-	});
-
-	// Create the inital debt row (temporary solution)
-	$('#addScnt').trigger('click');
+	FC.calculate.addDebtRow();
 
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
@@ -144,96 +145,32 @@ $(document).ready(function() {
 	var button = $('#calculate_button');
 
 	button.click(function() {
-		// code which is commented out was a test
-		//  var firstCell = $('input[name="dname_1"]').val();
-		//  alert(firstCell);
-		//  if(firstCell.length > 0 & !typeof firstCell == "undefined"){
-		//  financialArray[0][0] = firstCell;
-		//  alert(firstCell);
-		//      }
+		// Get the yearly salary and derive the the monthly payment
+		// TODO add in validation to see if income has value
+		var yearlySalary = $('#income_input').val();
+		var payment = parseFloat(yearlySalary)/12 * FC.calculate.PAYMENT_PERCENT_OF_YEARLY_SALARY;
+		//alert("This is your initial income-based payment: "+ payment);
 
+		var financialArray = [];
+		// Iterate through all the visible Debt paragraphs
+		$('#accounts div.row').each(function() {
+			var debtName = $(this).find('.debtName').val();
+			var debtAmount = parseFloat($(this).find('.debtAmount').val());
+			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+
+			financialArray.push({
+				name: debtName,
+				amount: debtAmount * -1,
+				rate: debtInterestRate,
+				minPay: minMonthlyPayment
+			});
+		});
 
 		// Resets all of the input fields to a non-error state
 		$('input').removeClass('error');
 
-		var payment = parseFloat($("input[name=\"income_input\"]").val())/12 * .01 ;
-		alert("This is your income-based payment: "+ payment);
-		//TODO add in validation to see if income has value
-		for ( i = 100; i > 1; i--) {// this for loop assumes that the user will have no more than 100 inputs, increase var i to desired amount
-			// for loop is finding
-			// TODO Add a class to designate inputs, so we don't need to use the magic number, 100
-			var testerInput = document.getElementsByName("dname_scnt_" + i);
-			if (testerInput.length > 0) {
-				break;
-			}// end if
-		}// end for
-
-		//alert("number of input rows is: " + i);
-		// TODO take this out when debug.complete
-		var arrayRowCounter = 0;
-		for (var z = 1; z < i + 1; z++) {// this for loop will be correct when i holds the correct number
-			// below the values are retrieved from the input boxes
-
-			var dnameVar = $('input[name=\"dname_scnt_' + z + '\"]').val();
-			//alert("debt namelength: " + dnameVar.length)
-			var amountVar = parseFloat($('input[name=\"amount_scnt_' + z + '\"]').val());
-			var interestVar = parseFloat($('input[name=\"interest_scnt_' + z + '\"]').val());
-			var minPayVar = parseFloat($('input[name=\"minpayamount_scnt_' + z + '\"]').val());
-			// alert("dnamevar: " + dnameVar);
-			// alert("amountvar " + amountVar);
-			// alert("interestVar " + interestVar);
-			// alert("minVar " + minPayVar);
-
-			if (dnameVar.length == 0 & isNaN(amountVar) & isNaN(interestVar) & isNaN(minPayVar)) {
-				alert("Nothing on this row has anything in it");
-				continue;
-			};
-
-			if (dnameVar.length > 0 & (isNaN(amountVar) | isNaN(interestVar) | isNaN(minPayVar))) {
-
-				if (isNaN(interestVar)) {
-					$('input[name="interest_scnt_' + z + '"]').addClass('error');
-					alert("Please make sure that the highlighted cells are in number format");
-				};
-				if (isNaN(amountVar)) {
-					$('input[name="amount_scnt_' + z + '"]').addClass('error');
-					alert("Please make sure that the highlighted cells are in number format");
-				};
-				if (isNaN(minPayVar)) {
-					$('input[name="minpayamount_scnt_' + z + '"]').addClass('error');
-					alert("Please make sure that the highlighted cells are in number format");
-				};
-
-				break;
-				// TODO perform this check for amountVar and InterestVar instead
-
-			};
-			if (dnameVar.length == 0 & (!isNaN(amountVar) | !isNaN(interestVar) | !isNaN(minPayVar))) {
-
-				$('input[name="dname_scnt_' + z + '"]').addClass('error');
-				alert("Please make sure that the highlighted cell holds the name for its respective row");
-				break;
-			};
-			// get the other inputs in the same row if the first input has something
-			// add the values of each row to the array
-
-			//alert(dnameVar + amountVar + interestVar + minPayVar);
-
-			//alert("Got to array");
-			financialArray[arrayRowCounter] = {
-				name : dnameVar,
-				amount : amountVar * -1,
-				rate : interestVar,
-				minPay : minPayVar
-			};
-
-			// the array is sorted according to AMOUNT(Should this be something else?)
-			financialArray = financialArray.sort(function(a, b) {
-				return a[1] > b[1];
-			});
-		}
-
-		// the array is sorted according to AMOUNT(Should this be something else?)
+		// The array is sorted according to AMOUNT(Should this be something else?)
 		financialArray = financialArray.sort(function(a, b) {
 			return a[1] > b[1];
 		});
@@ -357,54 +294,5 @@ $(document).ready(function() {
 		}//end for
 	});
 	// eventListener
-
-	var accounts = $('#accounts');
-	var i = accounts.size() + 1;
-
-	$('.addButton').click(function() {		
-		addNewAccount();
-	});
-
-	function addNewAccount (){
-		
-		$(".addButton").hide();
-		$('	<div class="row">' + 
-				'<div class="input-group col-sm-2">' +
-					'<input id="p_scnt_"'+i+' name="dname_scnt_'+i+'" class="form-control" placeholder="Debt Name"/>' +
-				'</div>' +
-				'<div class="input-group col-sm-2">' +
-					'<span class="input-group-addon">$</span>' +
-					'<input id="amount_scnt_"'+i+' name="amount_scnt_'+i+'" class="form-control" placeholder="Debt Amount"/>' +
-				'</div>' +
-				'<div class="input-group col-sm-2">' +
-					'<input id="interest_scnt_"'+i+' name="interest_scnt_'+i+'" class="form-control" placeholder="Interest Rate"/>' +
-					'<span class="input-group-addon">%</span>' +
-				'</div>' +
-				'<div class="input-group col-sm-2">' +
-					'<span class="input-group-addon">$</span>' +
-					'<input id="mpamount_scnt_"'+i+' name="minpayamount_scnt_'+i+'" class="form-control" placeholder="Min. Payment"/>' +
-				'</div>	' +
-				'<div class="col-sm-2">' +
-					'<button id="remScnt" type="button" class="btn btn-default btn-sm">-</button>' +
-					'<button class="addButton btn btn-default btn-sm" type="button">+</button>' +
-				'</div>' +
-			'</div>').appendTo(accounts);
-		i++;
-		$('.addButton:last').click(function() {		
-			addNewAccount();
-		});
-		return false;
-	}
-
-	$('#remScnt').live('click', function() {
-		if (i > 2) {
-			$(this).parents('div.row').remove();
-			$(".addButton:last").show();
-
-			i--;
-		}
-		return false;
-	});
-
 });
 

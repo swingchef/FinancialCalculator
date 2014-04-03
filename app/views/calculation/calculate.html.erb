@@ -1,21 +1,3 @@
-<!-- <h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
-<div class="income">
-
-	<label for="income_input">Yearly Income</label>
-	<input type="text" size="25" name="income_input" placeholder="Eg. 30000"/>
-</div>
-<div id="p_scents">
-	<p>
-		<label for="p_scnts">Debt Name</label>
-		<input type="text" id="p_scnt" size="25" name="dname_scnt_1" value="" placeholder="Eg. Credit Card XYZ" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."/>
-		<label for="amount_scnt_1">Debt Amount</label>
-		<input type="text" id="amount_scnt" size="25" name="amount_scnt_1"placeholder="Eg. 1000 = $1,000"/>
-		<label for="interest_scnt_1">Interest Rate</label>
-		<input type="text" id="interest_scnt" name="interest_scnt_1" size="25" placeholder="Eg. 9.5 = %9.5"/>
-		<label for="minpayamount_scnt_1">Min. Monthly Payment</label>
-		<input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_1"placeholder="Eg. 10 = $10"/>
-	</p>
-</div> -->
 <h2>Accounts</h2>
 <div class="well well-lg" role="">
 	<div class="row">
@@ -23,36 +5,11 @@
 			<label for="income_input" class="">Income:</label>
 		</div>
 		<div class="input-group col-sm-2">			
-			<input id="income_input" name="income_input" class="form-control"/>
+			<input id="income_input" class="form-control"/>
 		</div>
 	</div>
 	<p>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</p>
-	<div id="accounts">
-		<div class="row">
-			<div class="input-group col-sm-2">
-				<input id="p_scnt" name="dname_scnt_1" class="form-control" placeholder="Debt Name"/>
-			</div>
-			<div class="input-group col-sm-2">
-				<span class="input-group-addon">$</span>
-				<input id="amount_scnt" name="amount_scnt_1" class="form-control" placeholder="Debt Amount"/>
-			</div>
-			<div class="input-group col-sm-2">
-				<input id="interest_scnt" name="interest_scnt_1" class="form-control" placeholder="Interest Rate"/>
-				<span class="input-group-addon">%</span>		
-			</div>
-			<div class="input-group col-sm-2">
-				<span class="input-group-addon">$</span>
-				<input id="mpamount_scnt" name="minpayamount_scnt_1" class="form-control" placeholder="Min. Payment"/>
-			</div>	
-			<div class="col-sm-2">
-				<button class="addButton btn btn-default btn-sm" type="button">
-					<!-- <span class="glyphicon glyphicon-plus"></span> -->
-					+
-				</button>
-			</div>
-		</div>
-	</div>	
-
+	<div id="accounts"></div>	
 	<div class="row add">
 		<div class="col-sm-8">
 			<button id="calculate_button" class="btn btn-default btn-lg">Calculate</button>
