@@ -1,18 +1,18 @@
 <h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
 <div class="income">
 	<label for="income_input">Yearly Income</label>
-	<input type="text" name="income_input" placeholder="Eg. 30000"/>
+	<input type="text" id='yearlySalary' name="income_input" placeholder="Eg. 30000"/>
 </div>
 <div id="p_scents">
 	<p>
 		<label>Debt Name</label>
-		<input type="text" name="dname_1" value="" placeholder="Eg. Credit Card XYZ" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."/>
+		<input type="text" class='debtName' value="" placeholder="Eg. Credit Card XYZ" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."/>
 		<label>Debt Amount</label>
-		<input type="text" name="amount_1"placeholder="Eg. 1000 = $1,000"/>
+		<input type="text" class='debtAmount' placeholder="Eg. 1000 = $1,000"/>
 		<label>Interest Rate</label>
-		<input type="text" name="interest_1" placeholder="Eg. 9.5 = %9.5"/>
+		<input type="text" class='interestRate' placeholder="Eg. 9.5 = %9.5"/>
 		<label>Min. Monthly Payment</label>
-		<input type="text" name="minpayamount_1"placeholder="Eg. 10 = $10"/>
+		<input type="text" class='minMonthlyPayment' placeholder="Eg. 10 = $10"/>
 	</p>
 </div>
 <h3><a href="#" id="addScnt">Add Another Debt</a></h3>

@@ -18,13 +18,25 @@ FC.calculate = {
 		p.append(div);
 
 		var lName = $('<label>').text('Debt Name');
-		var iName = $('<input>').attr({type: 'text', placeholder: 'Eg. Credit Card XYZ'});
+		var iName = $('<input>').attr({
+			type: 'text',
+			class: 'debtName',
+			placeholder: 'Eg. Credit Card XYZ'});
 		var lAmount = $('<label>').text('Debt Amount');
-		var iAmount = $('<input>').attr({type: 'text', placeholder: 'Eg. 100 = $1,000'});
+		var iAmount = $('<input>').attr({
+			type: 'text',
+			class: 'debtAmount',
+			placeholder: 'Eg. 100 = $1,000'});
 		var lInterest = $('<label>').text('Interest Rate');
-		var iInterest = $('<input>').attr({type: 'text', placeholder: 'Eg. 9.5 = 9.5%'});
+		var iInterest = $('<input>').attr({
+			type: 'text',
+			class: 'interestRate',
+			placeholder: 'Eg. 9.5 = 9.5%'});
 		var lMonthlyPayment = $('<label>').text('Min. Monthly Payment');
-		var iMonthlyPayment = $('<input>').attr({type: 'text', placeholder: 'Eg. 10 = $10'});
+		var iMonthlyPayment = $('<input>').attr({
+			type: 'text',
+			class: 'minMonthlyPayment',
+			placeholder: 'Eg. 10 = $10'});
 		var removeButton = $('<a href="javascript:void(0)">Remove</a>');
 
 		removeButton.click(function() {
