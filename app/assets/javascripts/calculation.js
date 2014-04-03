@@ -156,8 +156,6 @@ $(document).ready(function() {
 		// Resets all of the input fields to a non-error state
 		$('input').removeClass('error');
 
-<<<<<<< HEAD
-		alert("hi");
 		var payment = parseFloat($("input[name=\"income_input\"]").val())/12 * .01 ;
 		alert("This is your income-based payment: "+ payment);
 		//TODO add in validation to see if income has value
@@ -232,29 +230,8 @@ $(document).ready(function() {
 			// the array is sorted according to AMOUNT(Should this be something else?)
 			financialArray = financialArray.sort(function(a, b) {
 				return a[1] > b[1];
-=======
-		// Get the yearly salary and derive the the monthly payment
-		// TODO add in validation to see if income has value
-		var yearlySalary = $('#yearlySalary').val();
-		var payment = parseFloat(yearlySalary)/12 * FC.calculate.PAYMENT_PERCENT_OF_YEARLY_SALARY;
-		alert("This is your initial income-based payment: "+ payment);
-
-		var financialArray = [];
-		// Iterate through all the visible Debt paragraphs
-		$('#p_scents p').each(function(){
-			var debtName = $(this).children('.debtName').val();
-			var debtAmount = parseFloat($(this).children('.debtAmount').val());
-			var debtInterestRate = parseFloat($(this).children('.interestRate').val());
-			var minMonthlyPayment = parseFloat($(this).children('.minMonthlyPayment').val());
-
-			financialArray.push({
-				name: debtName,
-				amount: debtAmount * -1,
-				rate: debtInterestRate,
-				minPay: minMonthlyPayment
->>>>>>> FETCH_HEAD
 			});
-		});
+		}
 
 		// the array is sorted according to AMOUNT(Should this be something else?)
 		financialArray = financialArray.sort(function(a, b) {
@@ -467,7 +444,7 @@ $(document).ready(function() {
 	});
 
 	function addNewAccount (){
-		alert("here");
+		
 		$(".addButton").hide();
 		$('	<div class="row">' + 
 				'<div class="input-group col-sm-2">' +
