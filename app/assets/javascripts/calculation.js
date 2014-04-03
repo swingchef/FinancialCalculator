@@ -123,6 +123,16 @@ FC.calculate = {
 /////////////////////////////////
 $(document).ready(function() {
 
+	// Add a new debt row
+	$('#addScnt').click(function() {
+		var debtParagraph = FC.calculate.createDebtRow();
+		$('#p_scents').append(debtParagraph);
+		return false;
+	});
+
+	// Create the inital debt row (temporary solution)
+	$('#addScnt').trigger('click');
+
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
 
@@ -293,12 +303,5 @@ $(document).ready(function() {
 
 
 	}); // eventListener
-
-	// Add a new debt row
-	$('#addScnt').click(function() {
-		var debtParagraph = FC.calculate.createDebtRow();
-		$('#p_scents').append(debtParagraph);
-		return false;
-	});
 });
 
