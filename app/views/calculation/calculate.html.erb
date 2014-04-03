@@ -1,5 +1,6 @@
-<h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
+<!-- <h3>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</h3>
 <div class="income">
+
 	<label for="income_input">Yearly Income</label>
 	<input type="text" size="25" name="income_input" placeholder="Eg. 30000"/>
 </div>
@@ -14,8 +15,56 @@
 		<label for="minpayamount_scnt_1">Min. Monthly Payment</label>
 		<input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_1"placeholder="Eg. 10 = $10"/>
 	</p>
+</div> -->
+<h2>Accounts</h2>
+<div class="well well-lg" role="">
+	<div class="row">
+		<div class="col-sm-1">
+			<label for="income_input" class="">Income:</label>
+		</div>
+		<div class="input-group col-sm-2">			
+			<input id="income_input" name="income_input" class="form-control"/>
+		</div>
+	</div>
+	<p>Please enter each respective debt which you have along with the debt amount, interest rate, and the minimum monthly payment amount. Don't worry about the order.</p>
+	<div id="accounts">
+		<div class="row">
+			<div class="input-group col-sm-2">
+				<input id="p_scnt" name="dname_scnt_1" class="form-control" placeholder="Debt Name"/>
+			</div>
+			<div class="input-group col-sm-2">
+				<span class="input-group-addon">$</span>
+				<input id="amount_scnt" name="amount_scnt_1" class="form-control" placeholder="Debt Amount"/>
+			</div>
+			<div class="input-group col-sm-2">
+				<input id="interest_scnt" name="interest_scnt_1" class="form-control" placeholder="Interest Rate"/>
+				<span class="input-group-addon">%</span>		
+			</div>
+			<div class="input-group col-sm-2">
+				<span class="input-group-addon">$</span>
+				<input id="mpamount_scnt" name="minpayamount_scnt_1" class="form-control" placeholder="Min. Payment"/>
+			</div>	
+			<div class="col-sm-2">
+				<button class="addButton btn btn-default btn-sm" type="button">
+					<!-- <span class="glyphicon glyphicon-plus"></span> -->
+					+
+				</button>
+			</div>
+		</div>
+	</div>	
+
+	<div class="row add">
+		<div class="col-sm-8">
+			<button id="calculate_button" class="btn btn-default btn-lg">Calculate</button>
+		</div>
+	</div>
 </div>
-<h3><a href="#" id="addScnt">Add Another Debt</a></h3>
+<hr/>
+<h2>Chart</h2>
+<div class="well well-lg">
+</div>
+
+<!-- <h3><a href="#" id="addScnt">Add Another Debt</a></h3>
 <button id="calculate_button" value="submit">
 	Calculate
-</button>
+</button> -->

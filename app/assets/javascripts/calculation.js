@@ -28,9 +28,11 @@ $(document).ready(function() {
 		//  alert(firstCell);
 		//      }
 
+
 		// Resets all of the input fields to a non-error state
 		$('input').removeClass('error');
 
+		alert("hi");
 		var payment = parseFloat($("input[name=\"income_input\"]").val())/12 * .01 ;
 		alert("This is your income-based payment: "+ payment);
 		//TODO add in validation to see if income has value
@@ -346,18 +348,48 @@ $(document).ready(function() {
 	});
 	// eventListener
 
-	var scntDiv = $('#p_scents');
-	var i = $('#p_scents p').size() + 1;
+	var accounts = $('#accounts');
+	var i = accounts.size() + 1;
 
-	$('#addScnt').click(function() {
-		$('<p><label for="p_scnts"><input type="text" id="p_scnt" size="25" name="dname_scnt_' + (i) + '" value="" placeholder="Debt Name" /><input type="text" id="amount_scnt" size="25" name="amount_scnt_' + (i) + '" placeholder="Debt Amount"/><input type="text" id="interest_scnt" size="25" name="interest_scnt_' + (i) + '"placeholder="Interest Rate"/><input type="text" id="mpamount_scnt" size="25" name="minpayamount_scnt_' + (i) + '"placeholder="Min. Monthly Payment"/></label><a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
-		i++;
-		return false;
+	$('.addButton').click(function() {		
+		addNewAccount();
 	});
+
+	function addNewAccount (){
+		alert("here");
+		$(".addButton").hide();
+		$('	<div class="row">' + 
+				'<div class="input-group col-sm-2">' +
+					'<input id="p_scnt_"'+i+' name="dname_scnt_'+i+'" class="form-control" placeholder="Debt Name"/>' +
+				'</div>' +
+				'<div class="input-group col-sm-2">' +
+					'<span class="input-group-addon">$</span>' +
+					'<input id="amount_scnt_"'+i+' name="amount_scnt_'+i+'" class="form-control" placeholder="Debt Amount"/>' +
+				'</div>' +
+				'<div class="input-group col-sm-2">' +
+					'<input id="interest_scnt_"'+i+' name="interest_scnt_'+i+'" class="form-control" placeholder="Interest Rate"/>' +
+					'<span class="input-group-addon">%</span>' +
+				'</div>' +
+				'<div class="input-group col-sm-2">' +
+					'<span class="input-group-addon">$</span>' +
+					'<input id="mpamount_scnt_"'+i+' name="minpayamount_scnt_'+i+'" class="form-control" placeholder="Min. Payment"/>' +
+				'</div>	' +
+				'<div class="col-sm-2">' +
+					'<button id="remScnt" type="button" class="btn btn-default btn-sm">-</button>' +
+					'<button class="addButton btn btn-default btn-sm" type="button">+</button>' +
+				'</div>' +
+			'</div>').appendTo(accounts);
+		i++;
+		$('.addButton:last').click(function() {		
+			addNewAccount();
+		});
+		return false;
+	}
 
 	$('#remScnt').live('click', function() {
 		if (i > 2) {
-			$(this).parents('p').remove();
+			$(this).parents('div.row').remove();
+			$(".addButton:last").show();
 
 			i--;
 		}
