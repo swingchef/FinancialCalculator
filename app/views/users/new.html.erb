@@ -1,6 +1,11 @@
 <h1>New User</h1>
 <div class="row">
   <div class="span6 offset3">
+		<% if @user.errors.full_messages.any? %>
+			<% @user.errors.full_messages.each do |error_message| %>
+				<%= error_message %> <br />
+			<% end %>
+		<% end %>
     <%= form_for(@user, :url => create_user_url) do |u| %>
       <%= u.label :name %>
       <%= u.text_field :name %><br />
