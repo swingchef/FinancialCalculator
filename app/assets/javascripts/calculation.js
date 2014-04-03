@@ -9,15 +9,15 @@
 
 $(document).ready(function() {
 
-	// Use the boolean to prevent an incomplete array from being sent to the next method.
-	var button = $('#calculate_button');
-
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
 
 	// Is this a good amount? this will change to whatever the for loop finds
 	var financialArray = [];
 	// this is the array which will store the values of each row
+
+	// Use the boolean to prevent an incomplete array from being sent to the next method.
+	var button = $('#calculate_button');
 
 	button.click(function() {
 		// code which is commented out was a test
