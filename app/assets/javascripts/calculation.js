@@ -123,6 +123,27 @@ FC.calculate = {
 		var decpoint = str.length - decplaces;
 		return (str.substring(0, decpoint) + "." + str.substring(decpoint, str.length));
 
+	},
+
+	saveDebts: function(){
+		// TODO Resolve code duplication
+		$('#accounts div.row').each(function() {
+			var debtName = $(this).find('.debtName').val();
+			var debtAmount = parseFloat($(this).find('.debtAmount').val());
+			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+
+			$.post('/debt', {
+				name: debtName,
+				amount: debtAmount,
+				interest_rate: debtInterestRate,
+				min_monthly_payment: minMonthlyPayment
+				},
+				function(data){
+					console.log(data);
+				}
+			);
+		});
 	}
 }
 
@@ -134,6 +155,7 @@ $(document).ready(function() {
 	// Add a new debt row
 	FC.calculate.addDebtRow();
 
+	$('#save_button').click(FC.calculate.saveDebts);
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
 
