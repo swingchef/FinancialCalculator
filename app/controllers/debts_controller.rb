@@ -1,4 +1,6 @@
 class DebtsController < ApplicationController
+
+	# TODO Protect this against stored XSS attacks
 	def create
 		@debt = Debt.new(debt_params)
 		_schedule = Schedule.find_by(user_id: current_user.id)
@@ -10,6 +12,7 @@ class DebtsController < ApplicationController
 			_schedule = Schedule.new(user_id: current_user.id)
 			_schedule.save
 		end
+
 		@debt.schedule_id = _schedule.id
 		# Check for successful creation
 		# TODO Return the appropriate error code
@@ -25,6 +28,16 @@ class DebtsController < ApplicationController
 		end
 	end
 
+	# TODO Figure out how to delete Debts
+	def delete
+		@debt = Debt.new(debt_params)
+		# TODO Again, correct error codes need to be returned
+		if @debt.destroy
+			render :inline => 'Successfully deleted debt: ' + @debt.name
+		else
+			render :inline => 'Failed to delete debt: ' + @debt.name
+		end
+	end
 	private
 		def debt_params
 			params.permit(:name, :amount, :interest_rate, :min_monthly_payment, :schedule_id)

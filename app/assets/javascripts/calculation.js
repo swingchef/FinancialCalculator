@@ -16,7 +16,8 @@ FC.calculate = {
 
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
 	// Returns: jQuery <p> element 
-	addDebtRow: function() {
+	addDebtRow: function(existingDebt) {
+
 		$(".addButton").hide();
 
 		var accountsDiv = $('#accounts');
@@ -44,6 +45,14 @@ FC.calculate = {
 		</div> \
 				');
 		accountsDiv.append(row);
+		
+		// Populate the existing debts, if they exist
+		if (typeof existingDebt != 'undefined') {
+			row.find('.debtName').val(existingDebt.name);
+			row.find('.debtAmount').val(existingDebt.amount);
+			row.find('.interestRate').val(existingDebt.interest_rate);
+			row.find('.minMonthlyPayment').val(existingDebt.min_monthly_payment);
+		}
 
 		FC.calculate.toggleMinusButtons();
 
@@ -152,8 +161,13 @@ FC.calculate = {
 /////////////////////////////////
 $(document).ready(function() {
 
-	// Add a new debt row
-	FC.calculate.addDebtRow();
+	for (var i = 0; i < existing_debt_array.length; i++){
+		FC.calculate.addDebtRow(existing_debt_array[i]);
+	}
+	// Add a new debt row if needed
+	if ($('#accounts div.row').size() < 1) {
+		FC.calculate.addDebtRow();
+	}
 
 	$('#save_button').click(FC.calculate.saveDebts);
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
