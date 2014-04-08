@@ -7,8 +7,7 @@ FinancialCalculator::Application.routes.draw do
   # Static routes
   root 'welcome#index'
   get '/index', to: 'welcome#index'
-  get '/about', to: 'welcome#about'
-  get '/login', to: 'welcome#dashboard'
+  get '/about', to: 'about#about'
   get '/calculate', to: 'calculation#calculate'
 
   # Session routes
