@@ -14,9 +14,13 @@ FC.calculate = {
 	// for monthly payments based on the user's yearly salary
 	PAYMENT_PERCENT_OF_YEARLY_SALARY: .01,
 
+	// The rows to delete on save
+	rowsToRemove: [],
+
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
 	// Returns: jQuery <p> element 
-	addDebtRow: function() {
+	addDebtRow: function(existingDebt) {
+
 		$(".addButton").hide();
 
 		var accountsDiv = $('#accounts');
@@ -43,12 +47,31 @@ FC.calculate = {
 			</div> \
 		</div> \
 				');
+
+		// Record the row ID's
 		accountsDiv.append(row);
+		
+		// Populate the existing debts, if they exist
+		if (typeof existingDebt != 'undefined') {
+			row.attr('data-id', existingDebt.id)
+
+			row.find('.debtName').val(existingDebt.name);
+			row.find('.debtAmount').val(existingDebt.amount);
+			row.find('.interestRate').val(existingDebt.interest_rate);
+			row.find('.minMonthlyPayment').val(existingDebt.min_monthly_payment);
+		}
 
 		FC.calculate.toggleMinusButtons();
 
 		$('.subtractButton:last').click(function() {
-			$(this).parents('div.row').remove();
+			targetRow = $(this).parents('div.row');
+
+			// If this row has an ID, add it to the "remove" list
+			debtID = targetRow.attr('data-id');
+			if(debtID){
+				FC.calculate.rowsToRemove.push(targetRow)
+			}
+			targetRow.remove();
 			FC.calculate.toggleMinusButtons();
 		});
 
@@ -123,6 +146,49 @@ FC.calculate = {
 		var decpoint = str.length - decplaces;
 		return (str.substring(0, decpoint) + "." + str.substring(decpoint, str.length));
 
+	},
+
+	saveDebts: function(){
+		// Save Salary
+		var salary = parseFloat($('#income_input').val());
+		$.post('/schedule', {
+			salary: salary
+		},
+		function(data){
+			console.log(data);
+		});
+
+		// Handle Debt deletion (and save)
+		for(var i = 0; i < FC.calculate.rowsToRemove.length; i++) {
+			$.ajax({
+				type:"DELETE",
+				data:{"id":FC.calculate.rowsToRemove[i].attr('data-id')},
+				url:"/debt"
+			});
+		}
+		// Reset the rows to remove, so we don't try and delete them again
+		FC.calculate.rowsToRemove = [];
+
+		// TODO Resolve code duplication
+		$('#accounts div.row').each(function() {
+			var debtName = $(this).find('.debtName').val();
+			var debtAmount = parseFloat($(this).find('.debtAmount').val());
+			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+			var debtID = $(this).attr('data-id') || 0
+
+			$.post('/debt', {
+				id: debtID,
+				name: debtName,
+				amount: debtAmount,
+				interest_rate: debtInterestRate,
+				min_monthly_payment: minMonthlyPayment
+				},
+				function(data){
+					console.log(data);
+				}
+			);
+		});
 	}
 }
 
@@ -131,9 +197,22 @@ FC.calculate = {
 /////////////////////////////////
 $(document).ready(function() {
 
-	// Add a new debt row
-	FC.calculate.addDebtRow();
+	if (typeof existing_salary != 'undefined' && existing_salary) {
+		$('#income_input').val(existing_salary);
+	}
+	// TODO This should not return '1' if there is nothing there...
+	if (typeof existing_debt_array != 'undefined' && existing_debt_array) {
+		console.log('existing_debt_array.length = ' + existing_debt_array.length);
+		for (var i = 0; i < existing_debt_array.length; i++){
+			FC.calculate.addDebtRow(existing_debt_array[i]);
+		}
+	}
+	// Add a new debt row if needed
+	if ($('#accounts div.row').size() < 1) {
+		FC.calculate.addDebtRow();
+	}
 
+	$('#save_button').click(FC.calculate.saveDebts);
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
 	var i = 4;
 

@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   # Password-related fields
   has_secure_password
+  has_many :schedule, :dependent => :destroy
   # validates :password, presence: { on: create }, length: {minimum: 8}
   validates :password, length: {minimum: 8},
                        allow_nil: true

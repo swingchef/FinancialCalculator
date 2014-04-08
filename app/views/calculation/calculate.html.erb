@@ -1,3 +1,14 @@
+<script type="text/javascript">
+	<!-- Define salary -->
+	<% if @salary %>
+		var existing_salary = <%= @salary %>;
+	<% else %>
+		var existing_salary;
+	<% end %>
+
+	<!-- Define debt array -->
+	var existing_debt_array = <%= raw @debt_array.to_json %>;
+</script>
 <h2>Accounts</h2>
 <div class="well well-lg" role="">
 	<div class="row">
@@ -12,6 +23,8 @@
 	<div id="accounts"></div>	
 	<div class="row add">
 		<div class="col-sm-8">
+			<!-- TODO Set these to a uniform width -->
+			<button id="save_button" class="btn btn-default btn-lg">Save</button>
 			<button id="calculate_button" class="btn btn-default btn-lg">Calculate</button>
 		</div>
 	</div>
