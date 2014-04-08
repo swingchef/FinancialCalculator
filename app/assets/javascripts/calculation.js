@@ -135,6 +135,17 @@ FC.calculate = {
 	},
 
 	saveDebts: function(){
+		// Save Salary
+		var salary = parseFloat($('#income_input').val());
+		$.post('/schedule', {
+			salary: salary
+		},
+		function(data){
+			console.log(data);
+		});
+
+		// TODO Handle Debt deletion (and save)
+
 		// TODO Resolve code duplication
 		$('#accounts div.row').each(function() {
 			var debtName = $(this).find('.debtName').val();
@@ -161,8 +172,15 @@ FC.calculate = {
 /////////////////////////////////
 $(document).ready(function() {
 
-	for (var i = 0; i < existing_debt_array.length; i++){
-		FC.calculate.addDebtRow(existing_debt_array[i]);
+	if (typeof existing_salary != 'undefined' && existing_salary) {
+		$('#income_input').val(existing_salary);
+	}
+	// TODO This should not return '1' if there is nothing there...
+	if (typeof existing_debt_array != 'undefined' && existing_debt_array) {
+		console.log('existing_debt_array.length = ' + existing_debt_array.length);
+		for (var i = 0; i < existing_debt_array.length; i++){
+			FC.calculate.addDebtRow(existing_debt_array[i]);
+		}
 	}
 	// Add a new debt row if needed
 	if ($('#accounts div.row').size() < 1) {

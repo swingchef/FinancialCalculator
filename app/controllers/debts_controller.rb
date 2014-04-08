@@ -19,12 +19,12 @@ class DebtsController < ApplicationController
 		if (@debt.save)
 			render :inline => 'Successfully saved debt: ' + @debt.name
 		else
-			@errorString = 'Failed to save debt: ' + @debt.name + '\n'
+			_errorString = 'Failed to save debt: ' + @debt.name + '\n'
 			@debt.errors.full_messages.each do |msg|
-				@errorString += msg + '\n'
+				_errorString += msg + '\n'
 			end
-			@errorString += "user_id = #{current_user.id}"
-			render :inline => @errorString
+			_errorString += "user_id = #{current_user.id}"
+			render :inline => _errorString
 		end
 	end
 

@@ -1,4 +1,12 @@
 <script type="text/javascript">
+	<!-- Define salary -->
+	<% if @salary %>
+		var existing_salary = <%= @salary %>;
+	<% else %>
+		var existing_salary;
+	<% end %>
+
+	<!-- Define debt array -->
 	var existing_debt_array = <%= raw @debt_array.to_json %>;
 </script>
 <h2>Accounts</h2>
