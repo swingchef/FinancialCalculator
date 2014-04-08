@@ -14,6 +14,9 @@ FC.calculate = {
 	// for monthly payments based on the user's yearly salary
 	PAYMENT_PERCENT_OF_YEARLY_SALARY: .01,
 
+	// The rows to delete on save
+	rowsToRemove: [],
+
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
 	// Returns: jQuery <p> element 
 	addDebtRow: function(existingDebt) {
@@ -44,10 +47,14 @@ FC.calculate = {
 			</div> \
 		</div> \
 				');
+
+		// Record the row ID's
 		accountsDiv.append(row);
 		
 		// Populate the existing debts, if they exist
 		if (typeof existingDebt != 'undefined') {
+			row.attr('data-id', existingDebt.id)
+
 			row.find('.debtName').val(existingDebt.name);
 			row.find('.debtAmount').val(existingDebt.amount);
 			row.find('.interestRate').val(existingDebt.interest_rate);
@@ -57,7 +64,14 @@ FC.calculate = {
 		FC.calculate.toggleMinusButtons();
 
 		$('.subtractButton:last').click(function() {
-			$(this).parents('div.row').remove();
+			targetRow = $(this).parents('div.row');
+
+			// If this row has an ID, add it to the "remove" list
+			debtID = targetRow.attr('data-id');
+			if(debtID){
+				FC.calculate.rowsToRemove.push(targetRow)
+			}
+			targetRow.remove();
 			FC.calculate.toggleMinusButtons();
 		});
 
@@ -144,7 +158,14 @@ FC.calculate = {
 			console.log(data);
 		});
 
-		// TODO Handle Debt deletion (and save)
+		// Handle Debt deletion (and save)
+		for(var i = 0; i < FC.calculate.rowsToRemove; i++) {
+			$.ajax({
+				type:"DELETE",
+				data:{"id":FC.calculate.rowsToRemove[i]},
+				url:"/debt"
+			});
+		}
 
 		// TODO Resolve code duplication
 		$('#accounts div.row').each(function() {

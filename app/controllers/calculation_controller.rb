@@ -5,11 +5,7 @@ class CalculationController < ApplicationController
 		unless _schedule.nil?
 			if _schedule.salary
 				@salary = _schedule.salary
-			end
-			_d = Debt.find_by(schedule_id: _schedule.id)
-
-			if _d
-				@debt_array.push(_d)
+				@debt_array = _schedule.debts
 			end
 		end
 	end
