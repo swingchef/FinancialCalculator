@@ -30,16 +30,18 @@ class DebtsController < ApplicationController
 
 	# TODO Figure out how to delete Debts
 	def delete
-		@debt = Debt.new(debt_params)
+		@debt = Debt.find(params[:id])
+		_dName = @debt.name
+		puts "Deleting Debt: " + @debt.name
 		# TODO Again, correct error codes need to be returned
 		if @debt.destroy
-			render :inline => 'Successfully deleted debt: ' + @debt.name
+			render :inline => 'Successfully deleted debt'
 		else
-			render :inline => 'Failed to delete debt: ' + @debt.name
+			render :inline => 'Failed to delete debt'
 		end
 	end
 	private
 		def debt_params
-			params.permit(:name, :amount, :interest_rate, :min_monthly_payment, :schedule_id)
+			params.permit(:id, :name, :amount, :interest_rate, :min_monthly_payment, :schedule_id)
 		end
 end

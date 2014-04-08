@@ -22,6 +22,7 @@ FinancialCalculator::Application.routes.draw do
 
   # Debt routes
   post '/debt', to: 'debts#create', as: :create_debt
+  delete '/debt', to: 'debts#delete', as: :delete_debt
   post '/schedule', to: 'schedule#create', as: :create_schedule
 
   # Example of regular route:

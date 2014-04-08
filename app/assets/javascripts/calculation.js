@@ -159,13 +159,15 @@ FC.calculate = {
 		});
 
 		// Handle Debt deletion (and save)
-		for(var i = 0; i < FC.calculate.rowsToRemove; i++) {
+		for(var i = 0; i < FC.calculate.rowsToRemove.length; i++) {
 			$.ajax({
 				type:"DELETE",
-				data:{"id":FC.calculate.rowsToRemove[i]},
+				data:{"id":FC.calculate.rowsToRemove[i].attr('data-id')},
 				url:"/debt"
 			});
 		}
+		// Reset the rows to remove, so we don't try and delete them again
+		FC.calculate.rowsToRemove = [];
 
 		// TODO Resolve code duplication
 		$('#accounts div.row').each(function() {
@@ -173,8 +175,10 @@ FC.calculate = {
 			var debtAmount = parseFloat($(this).find('.debtAmount').val());
 			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
 			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+			var debtID = $(this).attr('data-id') || 0
 
 			$.post('/debt', {
+				id: debtID,
 				name: debtName,
 				amount: debtAmount,
 				interest_rate: debtInterestRate,
