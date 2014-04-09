@@ -189,6 +189,81 @@ FC.calculate = {
 				}
 			);
 		});
+	},
+
+	generateGraph: function (cal) {
+		var data = cal
+		data.forEach( function (d, i) {
+		  var totalMonths = 0
+		  d.paymentSchedule.forEach( function (d, i) {
+		    totalMonths += d.months
+		  })
+		  d.months = totalMonths
+		})
+
+		var margin = {top: 20, right: 30, bottom: 30, left: 40},
+		    width = 1024 - margin.left - margin.right,
+		    height = 500 - margin.top - margin.bottom
+
+		var today = new Date()
+		var endDate = new Date()
+
+		var x = d3.time.scale()
+		    //.domain([0, d3.max(data, function (d) {
+		    //  return d.months
+		    //})])
+		    .domain([today, endDate.setMonth(
+		      today.getMonth() + d3.max(data, function (d) {
+		        return d.months
+		      })
+		    )])
+		    .range([0, width])
+		    .nice(10)
+
+		var y = d3.scale.ordinal()
+		    .rangeRoundBands([0, height], .1)
+		    .domain(data.map( function (d) {
+		      return d.debtName
+		    }))
+
+		var xAxis = d3.svg.axis()
+		    .scale(x)
+		    .orient("bottom")
+		    //.ticks(11)
+		    .tickFormat(d3.time.format("%m/%Y"))
+
+		var yAxis = d3.svg.axis()
+		    .scale(y)
+		    .orient("left")
+
+		var chart = d3.select(".chart")
+		    .attr("width", width + margin.left + margin.right)
+		    .attr("height", height + margin.top + margin.bottom)
+		  .append("g")
+		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+		chart.append("g")
+		    .attr("class", "x axis")
+		    .attr("transform", "translate(0," + height + ")")
+		    .call(xAxis)
+
+		chart.append("g")
+		    .attr("class", "y axis")
+		    .call(yAxis)
+
+		chart.selectAll(".bar")
+		    .data(data)
+		  .enter().append("rect")
+		    .attr("class", "bar")
+		    .attr("x", 0)
+		    .attr("y", function (d) {
+		      return y(d.debtName)
+		    })
+		    .attr("height", y.rangeBand())
+		    .attr("width", function (d) {
+		      var tempDate = new Date()
+		      return x(tempDate.setMonth(today.getMonth() + d.months))
+		    })
 	}
 }
 
@@ -370,6 +445,8 @@ $(document).ready(function() {
 			console.log("Printing the payment schedule " + storedArray[i]["debtName"]);
 			console.log(storedArray[i]["paymentSchedule"]);
 		}//end for
+
+		FC.calculate.generateGraph(storedArray)
 	});
 	// eventListener
 });
