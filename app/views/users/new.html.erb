@@ -1,25 +1,27 @@
-<h1>New User</h1>
-<div class="row">
-  <div class="span6 offset3">
-		<% if @user.errors.full_messages.any? %>
-			<% @user.errors.full_messages.each do |error_message| %>
-				<%= error_message %> <br />
-			<% end %>
-		<% end %>
-    <%= form_for(@user, :url => create_user_url) do |u| %>
-      <%= u.label :name %>
-      <%= u.text_field :name %><br />
+<div class="container">
+  <h1>New User</h1>
+  <div class="row">
+    <div class="span6 offset3">
+  		<% if @user.errors.full_messages.any? %>
+  			<% @user.errors.full_messages.each do |error_message| %>
+  				<%= error_message %> <br />
+  			<% end %>
+  		<% end %>
+      <%= form_for(@user, :url => create_user_url) do |u| %>
+        <%= u.label :name %>
+        <%= u.text_field :name %><br />
 
-      <%= u.label :email %>
-      <%= u.text_field :email %><br />
+        <%= u.label :email %>
+        <%= u.text_field :email %><br />
 
-      <%= u.label :password %>
-      <%= u.password_field :password %><br />
+        <%= u.label :password %>
+        <%= u.password_field :password %><br />
 
-      <%= u.label :password_confirmation %>
-      <%= u.password_field :password_confirmation %><br />
+        <%= u.label :password_confirmation %>
+        <%= u.password_field :password_confirmation %><br />
 
-      <%= u.submit "Sign up", class: "btn btn-large btn-primary" %>
-    <% end %>
+        <%= u.submit "Sign up", class: "btn btn-large btn-primary" %>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -1,18 +1,22 @@
 
-
-<!--<p>Find me in app/views/welcome/index.html.erb</p>-->
 <div class="jumbotron">
-        <h1>Welcome to your new, free debt reducer!</h1>
-   
-        	<div class ="row">
-        		<div class="span8">
-        		<img src="/images/chalkboard.png"/>
-        		</div>
-        		<div class="span4">
-        		<p class="lead">The ScottMarsh Financial Calculator is a financial function designed to help debtors payoff their long-term debts. Using this calculator, you can set out a plan to eliminate
-        	your debt and interest payments without drastically changing your lifestyle!</p>
-        		</div>
-        		<!--><div class="span4"></div>-->
-        		</div>
-        <a class="btn btn-large btn-success" href="#">Get started today!</a>
-      </div>
+    <div class="container">
+        <h1>Free Debt Reducer</h1>
+        <div class="row">
+            <div class="col-sm-6 center">
+                <img src="/images/debtFreeAhead.jpg"/>
+            </div>
+            <div class="col-sm-6">
+                <h3>Welcome to your new Free Debt Reducer</h3>
+                <p class="lead">
+                    The ScottMarsh Financial Calculator is a financial function designed to help debtors payoff their long-term debts. Using this calculator, you can set out a plan to eliminateyour debt and interest payments without drastically changing your lifestyle!
+                </p>
+                <% if signed_in? %>
+                    <a class="btn btn-large btn-success" href="calculate">Get started today!</a>
+                <% else %>
+                    <a class="btn btn-large btn-success" href="signin">Get started today!</a>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
