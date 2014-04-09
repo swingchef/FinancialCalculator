@@ -221,9 +221,8 @@ $(document).ready(function() {
 	// this is the array which will store the values of each row
 
 	// Use the boolean to prevent an incomplete array from being sent to the next method.
-	var button = $('#calculate_button');
 
-	button.click(function() {
+	$('#calculate_button').click(function() {
 		// Get the yearly salary and derive the the monthly payment
 		// TODO add in validation to see if income has value
 		var yearlySalary = $('#income_input').val();
