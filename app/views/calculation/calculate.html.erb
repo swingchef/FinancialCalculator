@@ -9,6 +9,8 @@
 	<!-- Define debt array -->
 	var existing_debt_array = <%= raw @debt_array.to_json %>;
 </script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+
 <div class="container">
 	<h2>Accounts</h2>
 	<div class="well well-lg" role="">
@@ -33,6 +35,8 @@
 	<hr/>
 	<h2>Chart</h2>
 	<div class="well well-lg">
+		<svg class="chart"></svg>
 	</div>
 </div>
+
 
