@@ -3,7 +3,7 @@ class DebtsController < ApplicationController
 	# TODO Protect this against stored XSS attacks
 	def create
 		# TODO Add code to update instead of create
-		if params[:id] == 0
+		if params[:id] == "0"
 			# This is a new debt
 			@debt = Debt.new(debt_params)
 			@debt.id = nil # Reset the id to nil, as the db needs to assign the ID
