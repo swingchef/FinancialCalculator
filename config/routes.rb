@@ -17,6 +17,8 @@ FinancialCalculator::Application.routes.draw do
 
   # User routes
   get '/signup',  to: 'users#new'
+  get '/profile', to: 'users#edit', as: :edit_user
+  patch '/profile', to: 'users#update', as: :update_user
   post '/signup',  to: 'users#create', as: :create_user
 
   # Debt routes
