@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class DebtTest < ActiveSupport::TestCase
+	test "Test Fixtures" do
+		assert_equal("American Express", debts(:debtOne).name);
+	end
+
 	test "Initialization rules" do
 		d = makeDefaultDebt()
 		d.name = ""
@@ -34,8 +38,7 @@ class DebtTest < ActiveSupport::TestCase
 		d.amount = 1000
 		d.interest_rate = 0.12
 		d.min_monthly_payment = 25
-		s = Schedule.find_by(name: 'MyString')
-		d.schedule_id = s.id
+		d.schedule_id = schedules(:one).id
 		return d
 	end
 end

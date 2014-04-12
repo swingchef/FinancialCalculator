@@ -40,4 +40,7 @@ class AuthenticationPagesTest < ActionDispatch::IntegrationTest
 	delete_via_redirect signout_path
 	assert_response :success
   end
+
+  test "change password" do
+  end
 end

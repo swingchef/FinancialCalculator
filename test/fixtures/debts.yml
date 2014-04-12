@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  amount: 1
-  interest_rate: 1.5
-  min_monthly_payment: 1
+debtOne:
+  name: American Express
+  amount: 1000
+  interest_rate: 20
+  min_monthly_payment: 50
+  schedule: one
 
-two:
-  name: MyString
-  amount: 1
-  interest_rate: 1.5
-  min_monthly_payment: 1
+debtTwo:
+  name: Mortgage
+  amount: 200000
+  interest_rate: 3.5
+  min_monthly_payment: 1024
+  schedule: one
