@@ -1,4 +1,4 @@
-$FooterHeight: 60px;
+$FooterHeight: 62px;
 $FooterColor: #808080;
 @body-bg #fff;
 
@@ -16,7 +16,7 @@ body {
   }
 
   #push, footer{
-      height: $FooterHeight;
+      height: $FooterHeight+8;
   }
 
   footer {
@@ -37,7 +37,7 @@ body {
            padding-right: 20px;
        }
        #content {
-        padding-top: 160px;
+          padding-top: 160px;
         }
    }
   .navbar-fixed-top{
