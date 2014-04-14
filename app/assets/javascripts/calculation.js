@@ -204,7 +204,7 @@ FC.calculate = {
 
 		var margin = {top: 20, right: 30, bottom: 30, left: 40},
 		    width = 1024 - margin.left - margin.right,
-		    height = 500 - margin.top - margin.bottom
+		    height = (cal.length * 100) - margin.top - margin.bottom
 
 		var today = new Date()
 		var endDate = new Date()
