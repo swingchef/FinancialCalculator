@@ -68,3 +68,18 @@ div.remove a{
 div.add {
   text-align: center;
 }
+.center {
+  text-align: center;
+}
+.jumbotron {
+  margin-top: -10px;
+  h1{
+    margin-top: -10px;
+    margin-bottom: 20px;
+  }
+  img {
+    border: 5px gray solid;
+    border-radius: 5px;
+    max-width: 75%;
+  }  
+}

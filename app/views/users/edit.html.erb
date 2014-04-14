@@ -1,13 +1,8 @@
 <div class="container">
-  <h1>New User</h1>
+  <h1>User Profile</h1>
   <div class="row">
     <div class="span6 offset3">
-  		<% if @user.errors.full_messages.any? %>
-  			<% @user.errors.full_messages.each do |error_message| %>
-  				<%= error_message %> <br />
-  			<% end %>
-  		<% end %>
-      <%= form_for(@user, :url => create_user_url) do |u| %>
+      <%= form_for(@user, :url => update_user_url) do |u| %>
         <%= u.label :name %>
         <%= u.text_field :name %><br />
 
@@ -20,7 +15,7 @@
         <%= u.label :password_confirmation %>
         <%= u.password_field :password_confirmation %><br />
 
-        <%= u.submit "Sign up", class: "btn btn-large btn-primary" %>
+        <%= u.submit "Save", class: "btn btn-large btn-primary" %>
       <% end %>
     </div>
   </div>

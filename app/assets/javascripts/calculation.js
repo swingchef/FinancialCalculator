@@ -304,29 +304,34 @@ $(document).ready(function() {
 		var yearlySalary = $('#income_input').val();
 		var payment = parseFloat(yearlySalary)/12 * FC.calculate.PAYMENT_PERCENT_OF_YEARLY_SALARY;
 		//alert("This is your initial income-based payment: "+ payment);
-
+		//var initNper = FC.calculate.nper(12,12, 100, -2000, 0);
+		//console.log(initNper);
 		var financialArray = [];
 		// Iterate through all the visible Debt paragraphs
-		$('#accounts div.row').each(function() {
-			var debtName = $(this).find('.debtName').val();
-			var debtAmount = parseFloat($(this).find('.debtAmount').val());
-			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
-			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+		 $('#accounts div.row').each(function() {
+            var debtName = $(this).find('.debtName').val();
+            var debtAmount = parseFloat($(this).find('.debtAmount').val());
+            var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+            var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+            var debtNper = parseFloat(FC.calculate.nper(debtInterestRate, 12, minMonthlyPayment, (debtAmount * -1), 0));
 
-			financialArray.push({
-				name: debtName,
-				amount: debtAmount * -1,
-				rate: debtInterestRate,
-				minPay: minMonthlyPayment
-			});
-		});
+
+            financialArray.push({
+                name: debtName,
+                amount: debtAmount * -1,
+                rate: debtInterestRate,
+                minPay: minMonthlyPayment,
+                nper: debtNper
+            });
+        });
+
 
 		// Resets all of the input fields to a non-error state
 		$('input').removeClass('error');
 
 		// The array is sorted according to AMOUNT(Should this be something else?)
 		financialArray = financialArray.sort(function(a, b) {
-			return a[1] > b[1];
+			return a["nper"] > b["nper"];
 		});
 
 		console.log(financialArray);
@@ -427,7 +432,7 @@ $(document).ready(function() {
 				break;
 			}
 			//here currentDebtAmount refers to the next loans value using the totalMonthPassed as the number of periods and 12 as NPER/YR
-			currentDebtAmount = FC.calculate.fv(financialArray[i+1]["rate"], 12, totalMonthsPassed, financialArray[i+1]["minPay"], financialArray[i+1]["amount"]);
+			currentDebtAmount = FC.calculate.fv(financialArray[i+1]["rate"], 12, totalMonthsPassed, (financialArray[i+1]["minPay"]), (financialArray[i+1]["amount"]));
 			console.log("The next debt's current amount at " + totalMonthsPassed + " months is " + currentDebtAmount);
 			//calculates next month's fv with rollover payment
 			var amountAfterRollover = FC.calculate.fv(financialArray[i+1]["rate"], 12, 1, financialArray[i+1]["minPay"] + finalMonthRolloverAmount, (currentDebtAmount * -1));
