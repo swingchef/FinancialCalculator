@@ -192,6 +192,7 @@ FC.calculate = {
 	},
 
 	generateGraph: function (cal) {
+		$("#chart-container").empty().append('<svg class="chart"></svg>')
 		var data = cal
 		data.forEach( function (d, i) {
 		  var totalMonths = 0
