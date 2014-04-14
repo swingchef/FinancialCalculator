@@ -179,6 +179,10 @@ FC.calculate = {
 	},
 
 	saveDebts: function(){
+		// User feedback: Show we are saving
+		$('#save_button').text("Saving...");
+
+
 		// Save Salary
 		var salary = parseFloat($('#income_input').val());
 		$.post('/schedule', {
@@ -219,6 +223,9 @@ FC.calculate = {
 				}
 			);
 		});
+		var b = $('#save_button');
+		b.text("Saved");
+		FC.calculate.disableUI(b);
 	},
 
 	generateGraph: function (cal) {
@@ -295,6 +302,14 @@ FC.calculate = {
 		      var tempDate = new Date()
 		      return x(tempDate.setMonth(today.getMonth() + d.months))
 		    })
+	},
+
+	disableUI: function(obj) {
+		obj.attr('disabled','disabled').addClass('ui-state-disabled');
+	},
+
+	enableUI: function(obj) {
+		obj.removeAttr('disabled','disabled').removeClass('ui-state-disabled');
 	}
 }
 
@@ -317,6 +332,17 @@ $(document).ready(function() {
 	if ($('#accounts div.row').size() < 1) {
 		FC.calculate.addDebtRow();
 	}
+
+	// Reset the "save" button any time the fields are modified
+	$('input').keyup(function(){
+		var b = $('#save_button');
+		FC.calculate.enableUI(b);
+		b.text("Save");
+	});
+
+	// Default the save button to disabled
+	FC.calculate.disableUI($('#save_button'));
+
 
 	$('#save_button').click(FC.calculate.saveDebts);
 	// NEED TO STILL CREATE A FOR LOOP WHICH STARTS AROUND 20 -> 1, CHECKS FOR dname_.value, when found, sets i = .value and breaks
