@@ -8,17 +8,24 @@
   			<% end %>
   		<% end %>
       <%= form_for(@user, :url => create_user_url) do |u| %>
-        <%= u.label :name %>
-        <%= u.text_field :name %><br />
+        <div class="row">
+          <%= u.label :name, class: "col-sm-4"%>
+          <%= u.text_field :name, class: "col-sm-3" %>
+        </div>
+        <div class="row">
+          <%= u.label :email, class: "col-sm-4"  %>
+          <%= u.text_field :email, class: "col-sm-3"  %>
+        </div>
 
-        <%= u.label :email %>
-        <%= u.text_field :email %><br />
+        <div class="row">
+          <%= u.label :password, class: "col-sm-4"  %>
+          <%= u.password_field :password, class: "col-sm-3"  %>
+        </div>
 
-        <%= u.label :password %>
-        <%= u.password_field :password %><br />
-
-        <%= u.label :password_confirmation %>
-        <%= u.password_field :password_confirmation %><br />
+        <div class="row">
+          <%= u.label :password_confirmation, class: "col-sm-4"  %>
+          <%= u.password_field :password_confirmation, class: "col-sm-3"  %>
+        </div>
 
         <%= u.submit "Sign up", class: "btn btn-large btn-primary" %>
       <% end %>
