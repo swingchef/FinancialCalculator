@@ -30,9 +30,9 @@ FC.calculate = {
 			var interestPayment = (testDebtAmount * testDebtInterestRate * .01)/12;
 			
 			if(interestPayment >= testMinMonthlyPayment){
-				console.log("This interest payment is too low");
+				console.log("The highlighted input box contains an interest payment that is too low");
 				validated= false;
-
+				$(this).find('.minMonthlyPayment').addClass('error');
 			};
 
           
