@@ -17,6 +17,36 @@ FC.calculate = {
 	// The rows to delete on save
 	rowsToRemove: [],
 
+	//check for infinite nper
+	validateInput: function(){
+		var validated = true;
+		$('#accounts div.row').each(function() {
+			
+            var testDebtName = $(this).find('.debtName').val();
+            var testDebtAmount = parseFloat($(this).find('.debtAmount').val());
+            var testDebtInterestRate = parseFloat($(this).find('.interestRate').val());
+            var testMinMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+            
+			var interestPayment = (testDebtAmount * testDebtInterestRate * .01)/12;
+			
+			if(interestPayment >= testMinMonthlyPayment){
+				console.log("This interest payment is too low");
+				validated= false;
+
+			};
+
+          
+        });
+        console.log("Got to end of test loop");
+        if(!validated){
+        	return false;
+        }//if
+        else
+        {
+        	return true;
+        }//else
+	},
+
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
 	// Returns: jQuery <p> element 
 	addDebtRow: function(existingDebt) {
@@ -307,156 +337,163 @@ $(document).ready(function() {
 		//var initNper = FC.calculate.nper(12,12, 100, -2000, 0);
 		//console.log(initNper);
 		var financialArray = [];
-		// Iterate through all the visible Debt paragraphs
-		 $('#accounts div.row').each(function() {
-            var debtName = $(this).find('.debtName').val();
-            var debtAmount = parseFloat($(this).find('.debtAmount').val());
-            var debtInterestRate = parseFloat($(this).find('.interestRate').val());
-            var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
-            var debtNper = parseFloat(FC.calculate.nper(debtInterestRate, 12, minMonthlyPayment, (debtAmount * -1), 0));
+
+		if(FC.calculate.validateInput()){
+			
+			// Iterate through all the visible Debt paragraphs
+			 $('#accounts div.row').each(function() {
+	            var debtName = $(this).find('.debtName').val();
+	            var debtAmount = parseFloat($(this).find('.debtAmount').val());
+	            var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+	            var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+	            var debtNper = parseFloat(FC.calculate.nper(debtInterestRate, 12, minMonthlyPayment, (debtAmount * -1), 0));
+
+				
+
+	            financialArray.push({
+	                name: debtName,
+	                amount: debtAmount * -1,
+	                rate: debtInterestRate,
+	                minPay: minMonthlyPayment,
+	                nper: debtNper
+	            });
+	        });
 
 
-            financialArray.push({
-                name: debtName,
-                amount: debtAmount * -1,
-                rate: debtInterestRate,
-                minPay: minMonthlyPayment,
-                nper: debtNper
-            });
-        });
+			// Resets all of the input fields to a non-error state
+			$('input').removeClass('error');
+			console.log("This is the financial array: "+financialArray);
+			// The array is sorted according to AMOUNT(Should this be something else?)
+			financialArray = financialArray.sort(function(a, b) {
+				return a["nper"] > b["nper"];
+			});
 
+			console.log("This is the financial array: "+financialArray[0]["nper"]);
 
-		// Resets all of the input fields to a non-error state
-		$('input').removeClass('error');
+			// TODO Need to review this against an external site that does the same
+			// TODO Make this its own function, for organization
+			var storedArray = [];
 
-		// The array is sorted according to AMOUNT(Should this be something else?)
-		financialArray = financialArray.sort(function(a, b) {
-			return a["nper"] > b["nper"];
-		});
+			// This accumulates each iteration, at the beginning we assume
+			// that the amount(10) is 1% of the person's income
+			var futureValue = 0;
 
-		console.log(financialArray);
+			// This doesn't change and is only used in the nper function
+			var totalMonthsPassed = 0;
 
-		// TODO Need to review this against an external site that does the same
-		// TODO Make this its own function, for organization
-		var storedArray = [];
+			// This adds the nper calculations per iteration, plus the
+			// special "rollover" payment month when one debt is finished
+			// and the difference is applied to the next
+			var finalMonthRolloverAmount = 0;
 
-		// This accumulates each iteration, at the beginning we assume
-		// that the amount(10) is 1% of the person's income
-		var futureValue = 0;
+			// This holds the unique value applied to the next debt during rollover month
+			payment = payment + financialArray[0]["minPay"];
+			var currentDebtAmount = 0;
+			var payoffMonths;
 
-		// This doesn't change and is only used in the nper function
-		var totalMonthsPassed = 0;
+			for (var i = 0; i < financialArray.length; i++) {
+				var paymentSchedule = [];
+				storedArray[i] = {
+					"debtName" : financialArray[i]["name"],
+					"debtAmount" : financialArray[i]["amount"]
+				};
+				console.log("Debt: " + financialArray[i]["name"] + " Amount: " + financialArray[i]["amount"]);
 
-		// This adds the nper calculations per iteration, plus the
-		// special "rollover" payment month when one debt is finished
-		// and the difference is applied to the next
-		var finalMonthRolloverAmount = 0;
+				payoffMonths = FC.calculate.nper(parseFloat(financialArray[i]["rate"]), 12, payment, financialArray[i]["amount"], futureValue);
 
-		// This holds the unique value applied to the next debt during rollover month
-		payment = payment + financialArray[0]["minPay"];
-		var currentDebtAmount = 0;
-		var payoffMonths;
+				//we round down in order to perform the fv function
+				var roundedPayoffMonths = Math.floor(payoffMonths);
+				console.log("Number of complete months to payoff debt " + financialArray[i]["name"] + ": " + roundedPayoffMonths);
 
-		for (var i = 0; i < financialArray.length; i++) {
-			var paymentSchedule = [];
-			storedArray[i] = {
-				"debtName" : financialArray[i]["name"],
-				"debtAmount" : financialArray[i]["amount"]
-			};
-			console.log("Debt: " + financialArray[i]["name"] + " Amount: " + financialArray[i]["amount"]);
+				//updating first payment schedule slot for each debt
+				if (i == 0) {
+					paymentSchedule[0] = {
+						"payment" : 0,
+						"months" : totalMonthsPassed,
+						"period" : 0
+					};
 
-			payoffMonths = FC.calculate.nper(parseFloat(financialArray[i]["rate"]), 12, payment, financialArray[i]["amount"], futureValue);
+				} else {
+					paymentSchedule[0] = {
+						"payment" : financialArray[i]["minPay"],
+						"months" : totalMonthsPassed - 1, //last month is accounted for in paymentSchedule[1]
+						"period" : 0
+					};
 
-			//we round down in order to perform the fv function
-			var roundedPayoffMonths = Math.floor(payoffMonths);
-			console.log("Number of complete months to payoff debt " + financialArray[i]["name"] + ": " + roundedPayoffMonths);
-
-			//updating first payment schedule slot for each debt
-			if (i == 0) {
-				paymentSchedule[0] = {
-					"payment" : 0,
-					"months" : totalMonthsPassed,
-					"period" : 0
 				};
 
-			} else {
-				paymentSchedule[0] = {
-					"payment" : financialArray[i]["minPay"],
-					"months" : totalMonthsPassed - 1, //last month is accounted for in paymentSchedule[1]
-					"period" : 0
+				totalMonthsPassed = totalMonthsPassed + roundedPayoffMonths;
+
+				//this calculates the last month amount and then adds the difference to the minPay of the next debt
+				var lastMonthAmount = FC.calculate.fv(parseFloat(financialArray[i]["rate"]), 12, roundedPayoffMonths, payment, financialArray[i]["amount"]);
+				lastMonthAmount = lastMonthAmount * (1+(financialArray[i]["rate"]*.01));
+				console.log("The residual amount in the last month is for " + financialArray[i]["name"] + ": " + lastMonthAmount);
+				console.log("Rollover Amount: " + finalMonthRolloverAmount+ " going into array storage");
+				if (i == 0) {
+					paymentSchedule[1] = {
+						"payment" : 0,
+						"months" : 0,
+						"period" : 1
+					};
+
+				} else {
+					paymentSchedule[1] = {
+						"payment" : financialArray[i]["minPay"] + finalMonthRolloverAmount,
+						"months" : 1,
+						"period" : 1
+					};
+
 				};
 
-			};
+				finalMonthRolloverAmount = payment - (lastMonthAmount); //TODO account for interest in the last month
 
-			totalMonthsPassed = totalMonthsPassed + roundedPayoffMonths;
+				console.log("Rollover Amount: " + finalMonthRolloverAmount);
 
-			//this calculates the last month amount and then adds the difference to the minPay of the next debt
-			var lastMonthAmount = FC.calculate.fv(parseFloat(financialArray[i]["rate"]), 12, roundedPayoffMonths, payment, financialArray[i]["amount"]);
-			lastMonthAmount = lastMonthAmount * (1+(financialArray[i]["rate"]*.01));
-			console.log("The residual amount in the last month is for " + financialArray[i]["name"] + ": " + lastMonthAmount);
-			console.log("Rollover Amount: " + finalMonthRolloverAmount+ " going into array storage");
-			if (i == 0) {
-				paymentSchedule[1] = {
-					"payment" : 0,
-					"months" : 0,
-					"period" : 1
+				paymentSchedule[2] = {
+					"payment" : payment,
+					"months" : roundedPayoffMonths,
+					"period" : 2
 				};
 
-			} else {
-				paymentSchedule[1] = {
-					"payment" : financialArray[i]["minPay"] + finalMonthRolloverAmount,
+				paymentSchedule[3] = {
+					"payment" : lastMonthAmount,
 					"months" : 1,
-					"period" : 1
+					"period" : 3
 				};
 
-			};
+				storedArray[i]["paymentSchedule"] = paymentSchedule;
+				if (i + 2 > financialArray.length) {
+					break;
+				}
+				//here currentDebtAmount refers to the next loans value using the totalMonthPassed as the number of periods and 12 as NPER/YR
+				currentDebtAmount = FC.calculate.fv(financialArray[i+1]["rate"], 12, totalMonthsPassed, (financialArray[i+1]["minPay"]), (financialArray[i+1]["amount"]));
+				console.log("The next debt's current amount at " + totalMonthsPassed + " months is " + currentDebtAmount);
+				//calculates next month's fv with rollover payment
+				var amountAfterRollover = FC.calculate.fv(financialArray[i+1]["rate"], 12, 1, financialArray[i+1]["minPay"] + finalMonthRolloverAmount, (currentDebtAmount * -1));
+				console.log("Amount after rollover payment month: " + amountAfterRollover);
+				//below, the original array is altered to hold the current amount for the next debt for the start of it's iteration
+				financialArray[i+1]["amount"] = amountAfterRollover * -1;
+				//accounting for rollover month timewise
+				totalMonthsPassed = totalMonthsPassed + 1;
 
-			finalMonthRolloverAmount = payment - (lastMonthAmount); //TODO account for interest in the last month
+				payment = payment + financialArray[i+1]["minPay"];
+				console.log("The base pay is now " + payment + " END LOOP");
 
-			console.log("Rollover Amount: " + finalMonthRolloverAmount);
+			}//end for
 
-			paymentSchedule[2] = {
-				"payment" : payment,
-				"months" : roundedPayoffMonths,
-				"period" : 2
-			};
+			for (var i = 0; i < financialArray.length; i++) {
+				console.log("Printing the payment schedule " + storedArray[i]["debtName"]);
+				console.log(storedArray[i]["paymentSchedule"]);
+			}//end for
 
-			paymentSchedule[3] = {
-				"payment" : lastMonthAmount,
-				"months" : 1,
-				"period" : 3
-			};
+			FC.calculate.generateGraph(storedArray)
+			$("html, body").animate({
+				scrollTop: $("#chartDiv").offset().top - 65
+			}, 400);
 
-			storedArray[i]["paymentSchedule"] = paymentSchedule;
-			if (i + 2 > financialArray.length) {
-				break;
-			}
-			//here currentDebtAmount refers to the next loans value using the totalMonthPassed as the number of periods and 12 as NPER/YR
-			currentDebtAmount = FC.calculate.fv(financialArray[i+1]["rate"], 12, totalMonthsPassed, (financialArray[i+1]["minPay"]), (financialArray[i+1]["amount"]));
-			console.log("The next debt's current amount at " + totalMonthsPassed + " months is " + currentDebtAmount);
-			//calculates next month's fv with rollover payment
-			var amountAfterRollover = FC.calculate.fv(financialArray[i+1]["rate"], 12, 1, financialArray[i+1]["minPay"] + finalMonthRolloverAmount, (currentDebtAmount * -1));
-			console.log("Amount after rollover payment month: " + amountAfterRollover);
-			//below, the original array is altered to hold the current amount for the next debt for the start of it's iteration
-			financialArray[i+1]["amount"] = amountAfterRollover * -1;
-			//accounting for rollover month timewise
-			totalMonthsPassed = totalMonthsPassed + 1;
-
-			payment = payment + financialArray[i+1]["minPay"];
-			console.log("The base pay is now " + payment + " END LOOP");
-
-		}//end for
-
-		for (var i = 0; i < financialArray.length; i++) {
-			console.log("Printing the payment schedule " + storedArray[i]["debtName"]);
-			console.log(storedArray[i]["paymentSchedule"]);
-		}//end for
-
-		FC.calculate.generateGraph(storedArray)
-		$("html, body").animate({
-			scrollTop: $("#chartDiv").offset().top - 65
-		}, 400);
-		
+		}else{
+			alert("One of your miminum payments isn't large enough");
+		}
 	});
 	// eventListener
 });
