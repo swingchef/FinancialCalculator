@@ -192,7 +192,6 @@ FC.calculate = {
 	},
 
 	generateGraph: function (cal) {
-		$("#chart-container").empty().append('<svg class="chart"></svg>')
 		var data = cal
 		data.forEach( function (d, i) {
 		  var totalMonths = 0
@@ -203,8 +202,13 @@ FC.calculate = {
 		})
 
 		var margin = {top: 20, right: 30, bottom: 30, left: 40},
-		    width = 1024 - margin.left - margin.right,
+		    width = $("#chart-container").width() - margin.left - margin.right,
 		    height = (cal.length * 100) - margin.top - margin.bottom
+
+		var svg = $("#chart-container").empty().append('<svg class="chart"></svg>')
+		    .attr("preserveAspectRatio", "xMidYMid")
+		    .attr("viewBox", "0 0 950 500")
+		    .attr("width", width)
 
 		var today = new Date()
 		var endDate = new Date()
@@ -265,6 +269,21 @@ FC.calculate = {
 		      var tempDate = new Date()
 		      return x(tempDate.setMonth(today.getMonth() + d.months))
 		    })
+
+		
+
+		$(window).resize(function() {
+			var width = $("#chart-container").width();
+			console.log(width)
+			svg.attr("width", width);
+			x.range([0, width])
+			chart.attr("width", width + margin.left + margin.right)
+			chart.selectAll('rect').attr("width", function (d) {
+		      var tempDate = new Date()
+		      return x(tempDate.setMonth(today.getMonth() + d.months))
+		    })
+		    chart.select('.x').call(xAxis.orient('bottom'))
+		});
 	}
 }
 
