@@ -452,6 +452,10 @@ $(document).ready(function() {
 		}//end for
 
 		FC.calculate.generateGraph(storedArray)
+		$("html, body").animate({
+			scrollTop: $("#chartDiv").offset().top - 65
+		}, 400);
+		
 	});
 	// eventListener
 });
