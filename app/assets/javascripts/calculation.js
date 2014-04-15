@@ -267,9 +267,6 @@ FC.calculate = {
 		var endDate = new Date()
 
 		var x = d3.time.scale()
-		    //.domain([0, d3.max(data, function (d) {
-		    //  return d.months
-		    //})])
 		    .domain([today, endDate.setMonth(
 		      today.getMonth() + d3.max(data, function (d) {
 		        return d.months
@@ -287,7 +284,7 @@ FC.calculate = {
 		var xAxis = d3.svg.axis()
 		    .scale(x)
 		    .orient("bottom")
-		    //.ticks(11)
+		    .ticks(width/100)
 		    .tickFormat(d3.time.format("%m/%Y"))
 
 		var yAxis = d3.svg.axis()
@@ -322,19 +319,6 @@ FC.calculate = {
 		      var tempDate = new Date()
 		      return x(tempDate.setMonth(today.getMonth() + d.months))
 		    })
-
-		/*$(window).resize(function() {
-			var width = $("#chart-container").width();
-			console.log(width)
-			svg.attr("width", width);
-			x.range([0, width])
-			chart.attr("width", width + margin.left + margin.right)
-			chart.selectAll('rect').attr("width", function (d) {
-		      var tempDate = new Date()
-		      return x(tempDate.setMonth(today.getMonth() + d.months))
-		    })
-		    chart.select('.x').call(xAxis.orient('bottom'))
-		});*/
 	},
 
 	disableUI: function(obj) {
@@ -546,6 +530,10 @@ $(document).ready(function() {
 			}//end for
 
 			FC.calculate.generateGraph(storedArray)
+
+			$(window).resize(function () {
+				FC.calculate.generateGraph(storedArray)
+			})
 
 			$("html, body").animate({
 				scrollTop: $("#chartDiv").offset().top - 65
