@@ -17,11 +17,33 @@ FC.calculate = {
 	// The rows to delete on save
 	rowsToRemove: [],
 
-	//check for infinite nper
+	// ValidationResult (persistent)
+	validationResult: true,
+
+	// Run validation tests
 	validateInput: function(){
-		var validated = true;
+		// Assume good until proven bad
+		var validationResult = true;
+
+		// Resets all of the input fields to a non-error state
+		$('input').removeClass('error');
+
+		// Check for empty or non-numeric values
+		$('#accounts div input').each(function() {
+			if (!$(this).val()) {
+				$(this).addClass('error');
+				validationResult = false;
+			}
+			if (!$(this).hasClass("debtName")) {
+				if (!parseFloat($(this).val())) {
+					$(this).addClass('error');
+					validationResult = false;
+				}
+			}
+		});
+
+		// Check for infinite nper
 		$('#accounts div.row').each(function() {
-			
             var testDebtName = $(this).find('.debtName').val();
             var testDebtAmount = parseFloat($(this).find('.debtAmount').val());
             var testDebtInterestRate = parseFloat($(this).find('.interestRate').val());
@@ -31,20 +53,13 @@ FC.calculate = {
 			
 			if(interestPayment >= testMinMonthlyPayment){
 				console.log("The highlighted input box contains an interest payment that is too low");
-				validated= false;
+				validationResult = false;
 				$(this).find('.minMonthlyPayment').addClass('error');
 			};
 
           
         });
-        console.log("Got to end of test loop");
-        if(!validated){
-        	return false;
-        }//if
-        else
-        {
-        	return true;
-        }//else
+		return validationResult;
 	},
 
 	// Creates a <p><div><row of debt inputs></div></p> that is self-contained
@@ -187,53 +202,57 @@ FC.calculate = {
 	},
 
 	saveDebts: function(){
-		// User feedback: Show we are saving
-		$('#save_button').text("Saving...");
+		if(FC.calculate.validateInput()){
+			// User feedback: Show we are saving
+			$('#save_button').text("Saving...");
 
 
-		// Save Salary
-		var salary = parseFloat($('#income_input').val());
-		$.post('/schedule', {
-			salary: salary
-		},
-		function(data){
-			console.log(data);
-		});
-
-		// Handle Debt deletion (and save)
-		for(var i = 0; i < FC.calculate.rowsToRemove.length; i++) {
-			$.ajax({
-				type:"DELETE",
-				data:{"id":FC.calculate.rowsToRemove[i].attr('data-id')},
-				url:"/debt"
+			// Save Salary
+			var salary = parseFloat($('#income_input').val());
+			$.post('/schedule', {
+				salary: salary
+			},
+			function(data){
+				console.log(data);
 			});
+
+			// Handle Debt deletion (and save)
+			for(var i = 0; i < FC.calculate.rowsToRemove.length; i++) {
+				$.ajax({
+					type:"DELETE",
+					data:{"id":FC.calculate.rowsToRemove[i].attr('data-id')},
+					url:"/debt"
+				});
+			}
+			// Reset the rows to remove, so we don't try and delete them again
+			FC.calculate.rowsToRemove = [];
+
+			// TODO Resolve code duplication
+			$('#accounts div.row').each(function() {
+				var debtName = $(this).find('.debtName').val();
+				var debtAmount = parseFloat($(this).find('.debtAmount').val());
+				var debtInterestRate = parseFloat($(this).find('.interestRate').val());
+				var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
+				var debtID = $(this).attr('data-id') || 0
+
+				$.post('/debt', {
+					id: debtID,
+					name: debtName,
+					amount: debtAmount,
+					interest_rate: debtInterestRate,
+					min_monthly_payment: minMonthlyPayment
+					},
+					function(data){
+						console.log(data);
+					}
+				);
+			});
+			var b = $('#save_button');
+			b.text("Saved");
+			FC.calculate.disableUI(b);
+		}else{
+			alert("There is an error with one of your inputs\nOr one of your minimum payments does not pay even the interest on your loan.");
 		}
-		// Reset the rows to remove, so we don't try and delete them again
-		FC.calculate.rowsToRemove = [];
-
-		// TODO Resolve code duplication
-		$('#accounts div.row').each(function() {
-			var debtName = $(this).find('.debtName').val();
-			var debtAmount = parseFloat($(this).find('.debtAmount').val());
-			var debtInterestRate = parseFloat($(this).find('.interestRate').val());
-			var minMonthlyPayment = parseFloat($(this).find('.minMonthlyPayment').val());
-			var debtID = $(this).attr('data-id') || 0
-
-			$.post('/debt', {
-				id: debtID,
-				name: debtName,
-				amount: debtAmount,
-				interest_rate: debtInterestRate,
-				min_monthly_payment: minMonthlyPayment
-				},
-				function(data){
-					console.log(data);
-				}
-			);
-		});
-		var b = $('#save_button');
-		b.text("Saved");
-		FC.calculate.disableUI(b);
 	},
 
 	generateGraph: function (cal) {
@@ -373,7 +392,6 @@ $(document).ready(function() {
 
 	$('#calculate_button').click(function() {
 		// Get the yearly salary and derive the the monthly payment
-		// TODO add in validation to see if income has value
 		var yearlySalary = $('#income_input').val();
 		var payment = parseFloat(yearlySalary)/12 * FC.calculate.PAYMENT_PERCENT_OF_YEARLY_SALARY;
 		//alert("This is your initial income-based payment: "+ payment);
@@ -381,6 +399,7 @@ $(document).ready(function() {
 		//console.log(initNper);
 		var financialArray = [];
 
+		// Validate to make sure income has value
 		if(FC.calculate.validateInput()){
 			
 			// Iterate through all the visible Debt paragraphs
@@ -403,8 +422,6 @@ $(document).ready(function() {
 	        });
 
 
-			// Resets all of the input fields to a non-error state
-			$('input').removeClass('error');
 			console.log("This is the financial array: "+financialArray);
 			// The array is sorted according to AMOUNT(Should this be something else?)
 			financialArray = financialArray.sort(function(a, b) {
@@ -540,7 +557,7 @@ $(document).ready(function() {
 			}, 400);
 
 		}else{
-			alert("One of your miminum payments isn't large enough");
+			alert("There is an error with one of your inputs\nOr one of your minimum payments does not pay even the interest on your loan.");
 		}
 	});
 	// eventListener
