@@ -230,6 +230,7 @@ FC.calculate = {
 
 	generateGraph: function (cal) {
 		var data = cal
+		var maxDebtNameLength = 0
 		data.forEach( function (d, i) {
 		  var totalMonths = 0
 		  d.paymentSchedule.forEach( function (d, i) {
@@ -238,7 +239,14 @@ FC.calculate = {
 		  d.months = totalMonths
 		})
 
-		var margin = {top: 20, right: 30, bottom: 30, left: 40},
+		var max = 13
+		data.forEach( function (d, i) {
+			if (d.debtName.length > max) {
+				max = d.debtName.length
+			}
+		})
+
+		var margin = {top: 20, right: 30, bottom: 30, left: max * 6},
 		    width = $("#chart-container").width() - margin.left - margin.right,
 		    height = (cal.length * 100) - margin.top - margin.bottom
 
@@ -306,8 +314,8 @@ FC.calculate = {
 		      var tempDate = new Date()
 		      return x(tempDate.setMonth(today.getMonth() + d.months))
 		    })
-		    
-		$(window).resize(function() {
+
+		/*$(window).resize(function() {
 			var width = $("#chart-container").width();
 			console.log(width)
 			svg.attr("width", width);
@@ -318,7 +326,7 @@ FC.calculate = {
 		      return x(tempDate.setMonth(today.getMonth() + d.months))
 		    })
 		    chart.select('.x').call(xAxis.orient('bottom'))
-		});
+		});*/
 	},
 
 	disableUI: function(obj) {
@@ -530,6 +538,7 @@ $(document).ready(function() {
 			}//end for
 
 			FC.calculate.generateGraph(storedArray)
+
 			$("html, body").animate({
 				scrollTop: $("#chartDiv").offset().top - 65
 			}, 400);
