@@ -103,10 +103,18 @@ FC.calculate = {
 			}
 			targetRow.remove();
 			FC.calculate.toggleMinusButtons();
+			var b = $('#save_button');
+			FC.calculate.enableUI(b);
 		});
 
 		$('.addButton:last').click(function() {		
 			FC.calculate.addDebtRow();
+		});
+		// Reset the "save" button any time the fields are modified
+		$('input').keyup(function(){
+			var b = $('#save_button');
+			FC.calculate.enableUI(b);
+			b.text("Save");
 		});
 	},
 
